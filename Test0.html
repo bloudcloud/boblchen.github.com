@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html class="theme">
+<head>
+    <meta charset="utf-8">
+
+    <link href="#" rel="stylesheet" media="screen", id="base-min">
+    <link href="#" ="stylesheet", id="style-sheet">
+    <link href="#" rel="stylesheet", id="font-awesome">
+    <link href="#" rel="stylesheet" type="text/css" id="prettify-style">
+    <link href="#" rel="stylesheet" media="screen", id="layout-min">
+
+    <script type="text/javascript">
+
+        // 获取站点根目录
+        function getRootPath() {
+            var strFullPath = window.document.location.href;
+            var strPath     = window.document.location.pathname;
+            var pos         = strFullPath.indexOf(strPath);
+            var prePath     = strFullPath.substring(0, pos);
+            var postPath    = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
+            return(prePath + postPath);
+        } 
+
+        // 载入css
+        function loadCSS() {
+            document.getElementById("base-min").href = getRootPath() + "/css/base.lib.min.css";
+            document.getElementById("style-sheet").href = getRootPath() + "/css/style.css";
+            document.getElementById("font-awesome").href = getRootPath() + "/css/font-awesome.css";
+            document.getElementById("prettify-style").href = getRootPath() + "/css/prettify-cmd.css";
+            document.getElementById("layout-min").href = getRootPath() + "/css/layout.min.css";
+        }
+
+        loadCSS();
+        
+    </script>
+
+</head>
+
+<body class="theme">
+
+        <div id="editor-reader-full" class="editor-reader-full-shown" style="position: static; padding-right: 75px">
+        <div id="wmd-preview" class="wmd-preview wmd-preview-full-reader"><div class="md-section-divider"></div>
+
+    <div class="md-section-divider"></div>
+
+    <h1 id="在此处输入标题" data-anchor-id="1o0l">在此处输入标题</h1>
+
+    <p data-anchor-id="0mks"><code>未分类</code></p>
+
+    <hr>
+
+    <div class="md-section-divider"></div>
+
+    <pre class="prettyprint linenums prettyprinted" data-anchor-id="eh81"><ol class="linenums"><li class="L0"><code><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Test</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="pun">}</span></code></li></ol></pre>
+
+    <p data-anchor-id="vlvn">在此输入正文</p></div>
+        <div class="remark-icons">
+        </div>
+    </div>
+
+</body>
+</html>
+    
