@@ -4,36 +4,11 @@
 <head>
     <meta charset="utf-8">
 
-    <link href="#" rel="stylesheet" media="screen", id="base-min">
-    <link href="#" ="stylesheet", id="style-sheet">
-    <link href="#" rel="stylesheet", id="font-awesome">
-    <link href="#" rel="stylesheet" type="text/css" id="prettify-style">
-    <link href="#" rel="stylesheet" media="screen", id="layout-min">
-
-    <script type="text/javascript">
-
-        // 获取站点根目录
-        function getRootPath() {
-            var strFullPath = window.document.location.href;
-            var strPath     = window.document.location.pathname;
-            var pos         = strFullPath.indexOf(strPath);
-            var prePath     = strFullPath.substring(0, pos);
-            var postPath    = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-            return(prePath + postPath);
-        } 
-
-        // 载入css
-        function loadCSS() {
-            document.getElementById("base-min").href = getRootPath() + "/css/base.lib.min.css";
-            document.getElementById("style-sheet").href = getRootPath() + "/css/style.css";
-            document.getElementById("font-awesome").href = getRootPath() + "/css/font-awesome.css";
-            document.getElementById("prettify-style").href = getRootPath() + "/css/prettify-cmd.css";
-            document.getElementById("layout-min").href = getRootPath() + "/css/layout.min.css";
-        }
-
-        loadCSS();
-        
-    </script>
+    <link href="../css/base.lib.min.css" rel="stylesheet" media="screen", id="base-min">
+    <link href="../css/style.css" ="stylesheet", id="style-sheet">
+    <link href="../css/font-awesome.css" rel="stylesheet", id="font-awesome">
+    <link href="../css/prettify-cmd.css" rel="stylesheet" type="text/css" id="prettify-style">
+    <link href="../css/layout.min.css" rel="stylesheet" media="screen", id="layout-min">
 
 </head>
 
