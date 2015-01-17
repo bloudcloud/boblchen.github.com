@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="theme">
+<head>
+    <meta charset="utf-8">
+    <title>Markdown 编辑阅读器</title>
+    <link href="css/base.lib.min.css"   rel="stylesheet"    media="screen">
+    <link href="css/style.css"          rel="stylesheet">
+    <link href="css/font-awesome.css"   rel="stylesheet">
+    <link href="css/prettify-cmd.css"   rel="stylesheet"    type="text/css"     id="prettify-style">
+    <link href="css/layout.min.css"     rel="stylesheet"    media="screen">
+</head>
+
+<body class="theme">
+
+<div id="container">
+
+    <div id="editor-column" class="pull-left">
+        <!-- 工具条 -->
+        <div id="wmd-button-bar" class="wmd-button-bar"></div>
+        <!-- 左边文本框 -->
+        <div id="wmd-panel-editor" class="wmd-panel-editor">
+            <textarea class="wmd-input theme" id="wmd-input" spellcheck="false" autocomplete="off"></textarea>
+        </div>
+    </div>
+    
+    <!-- preview -->
+    <div id="preview-column" class="pull-right">
+        <!-- preview工具条 -->
+        <div id="preview-button-bar" class="preview-button-bar">
+            <ul id="preview-button-row" class="preview-button-row pull-right">
+                    <!-- 发布 -->
+                    <li class="preview-link editor-only" id="preview-publish-button" title="立即发布 Ctrl+Alt+P">
+                        <div class="btn-group">
+                            <button>
+                                <span class="icon-share"></span>
+                                发布
+                            </button>
+                        </div>
+                    </li>
+                    <!-- 新文稿 -->
+                    <li class="preview-link editor-only" id="preview-new-button" title="新文稿 Ctrl+Alt+N">
+                        <div class="btn-group">
+                            <button>
+                                <span class="icon-file"></span>
+                                新文稿
+                            </button>
+                        </div>
+                    </li>
+                    <li class="wmd-spacer editor-only"></li>
+
+                    <li class="preview-button dropdown editor-only" id="preview-settings-button" title="功能设置 Ctrl+Alt+R">
+                        <span class="dropdown-toggle icon-gear" data-toggle="dropdown"></span>
+                        <ul id="settings-menu" class="dropdown-menu theme-black pull-right" role="menu">
+                            <li title="导出 Html 文件"><a id="download-html-submenu" tabindex="-1" href="#"><i class="icon-cloud-download"></i>导出 Html</a></li>
+                            <li title="导出 Markdown 文件"><a id="download-markdown-submenu" tabindex="-1" href="#"><i class="icon-cloud-download"></i>导出 Markdown</a></li>
+                            <li class="divider"></li>
+                                <li title="普通模式"><a id="mode-normal-submenu" tabindex="-1" href="#"><span><i class="icon-pencil"></i>普通模式</span></a></li>
+                                <li title="确认清楚该选项含义后选择，同时禁用浏览器的Vim插件"><a id="mode-vim-submenu" tabindex="-1" href="#"><span><i class="icon-edit-sign"></i>Vim 模式</span></a></li>
+                                <li title="确认清楚该选项含义后选择"><a id="mode-emacs-submenu" tabindex="-1" href="#"><span><i class="icon-edit"></i>Emacs 模式</span></a></li>
+                                <li class="divider"></li>
+                                <li title="使用普通文本编辑器">
+                                    <a tabindex="-1" href="https://www.zybuluo.com/mdeditor/note/64041?light_mode=True">
+                                        <i class="icon-check-empty"></i>轻量编辑器
+                                    </a>
+                                </li>
+                        </ul>
+                    </li>
+                <!-- There is at least one item of 'wmd-spacer' must be in the ul list, otherwise, the hover on the button leads to page issue. -->
+                <li class="wmd-spacer"></li>
+            </ul>
+        </div>
+        <!--in page preview buttons. -->
+        <div class="in-page-preview-buttons">
+            <ul>
+                <li class="in-page-button dropdown" id="preview-toc-button" title="内容目录 Ctrl+Alt+O">
+                    <span class="dropdown-toggle icon-list" data-toggle="dropdown"></span>
+                    <div id="toc-list" class="dropdown-menu theme pull-right"> <!-- Add theme means this element will be changed when apply theme color. -->
+                        <h3>内容目录</h3>
+                        <hr>
+                        <div class="table-of-contents"></div>
+                    </div>
+                </li>
+                <li class="in-page-button editor-only" id="editor-reader-exchange-button" title="交换左右视图 Ctrl+Alt+X">
+                    <span class="icon-chevron-sign-left"></span>
+                </li>
+                <li class="in-page-button" id="preview-theme-button" title="主题切换 Ctrl+Alt+J">
+                    <span class="icon-adjust"></span>
+                </li>
+                <li class="in-page-button" id="preview-reader-full-button" title="阅读模式 Ctrl+Alt+M">
+                    <span class="icon-desktop"></span>
+                </li>
+                <li class="in-page-button" id="preview-reader-small-button" title="预览模式 Ctrl+Alt+M">
+                    <span class="icon-columns"></span>
+                </li>
+                <li class="in-page-button" id="preview-fullscreen-button" title="全屏模式 F11">
+                    <span class="icon-fullscreen"></span>
+                </li>
+            </ul>
+        </div>
+        <div id="wmd-panel-preview" class="wmd-panel-preview preview-container">
+            <div id="wmd-preview" class="wmd-preview"></div>
+            <div class="remark-icons">
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+
+<div id="editorDialog" class="modal hide fade theme" tabindex="-1" role="dialog" aria-labelledby="editor-title" aria-hidden="true">
+    <div class="modal-header theme">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="editorDialog-title"></h3>
+    </div>
+    <div class="modal-body theme">
+        <p></p>
+        <i class="icon-2x"></i> <input class="span5" type="text" placeholder=''>
+    </div>
+    <div class="modal-footer theme">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">取消 (Esc)</button>
+        <button id="editorDialog-confirm" class="btn btn-primary">确认 <i class="icon-level-down icon-rotate-90 icon-large"></i></button>
+    </div>
+</div>
+
+<div id="editor-reader-full" class="editor-reader-full-hidden">
+</div>
+
+<div id="reader-full-toolbar" class="reader-full-toolbar-hidden">
+</div>
+<ul id="reader-full-toolbar-tail" class="reader-full-toolbar-tail-hidden">
+    <li class="preview-button-full-reader" id="preview-hidden-button" title="隐藏工具栏 Ctrl+Alt+I">
+        <span class="icon-chevron-sign-right"></span>
+    </li>
+</ul>
+
+<!-- Prompt on loading article, hidden when loading. -->
+<div id="article-loading-alert" class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>正在加载文章图片，请稍等片刻... </strong>
+</div>
+
+<!-- UML diagram, hidden always -->
+<div id="uml-X-x-X-diagram"></div>
+
+<!-- side remark, hidden when loading. -->
+<div class="remark-list side-remark-hidden">
+    <div class="remark-items">
+    </div>
+    <div class="leave-remark unselectable"><span class='icon-plus-sign-alt'></span><span>添加新批注</span></div>
+    <div class="new-remark">
+        <!-- clone the template $('.new-remark-reply').html() to here.-->
+    </div>
+</div>
+
+<!-- template for new remark/reply -->
+<div class="new-remark-reply side-remark-hidden">
+    <div class="remark-head"><a><img src="https://www.zybuluo.com/static/img/default-head.jpg"></a></div>
+    <div class="remark-author unselectable"><strong>xiaopengyou</strong></div>
+    <div class="remark-editor" contentEditable="true" spellcheck="false"></div>
+    <!-- this will be filled up by js.
+    <div class="inline-error">402/400</div> for new remark
+    <div class="inline-error">202/200</div> for new reply
+    -->
+    <div class="remark-footer unselectable">
+        <button class="remark-save btn-link">保存</button>
+        <button class="remark-cancel btn-link">取消</button>
+    </div>
+</div>
+
+<!-- template for .remark-item/.remark-reply -->
+<div class="remark-item-reply side-remark-hidden">
+    <div class="remark-head"><a><img src="https://www.zybuluo.com/static/img/default-head.jpg"></a></div>
+    <div class="remark-author unselectable"></div>
+    <div class="remark-delete-link unselectable"><span class="icon-remove"></span></div> <!--This is mainly for deleting remark-reply, shown when author/remark hovering on remark-reply.-->
+    <div class="remark-editor" contentEditable="true" spellcheck="false"></div>
+    <!-- this will be filled up by js.
+    <div class="inline-error">402/400</div> for new remark
+    <div class="inline-error">202/200</div> for new reply
+    -->
+    <div class="remark-footer unselectable">
+        <button class="remark-edit btn-link">修改</button>
+        <button class="remark-save btn-link">保存</button>
+        <button class="remark-cancel btn-link">取消</button>
+        <button class="remark-delete btn-link">删除</button>
+    </div>
+</div>
+
+    <script src="js/base.lib.min.js"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]], processEscapes: true },  messageStyle: "none"});
+    </script>
+
+    <script src="js/mathJax.js"></script>
+    <script src="https://www.zybuluo.com/static/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script>
+        Namespace('com.zybuluo.mdeditor.layout');
+        com.zybuluo.mdeditor.layout.initData = {
+            isPageOwner: true,
+        };
+        window.paceOptions = {
+            ajax: true,
+            document: false,
+            elements: false,
+            eventLag: false,
+        };
+    </script>
+    
+    <script src="js/layout.lib.min.js"></script>
+    <script src="js/layout.min.js"></script>
+    <script src="js/mdeditor.lib.min.js"></script>
+    <script src="js/sequence-diagram-min-1.0.4.js"></script>
+
+    <script>
+        Namespace('com.zybuluo.mdeditor');
+        com.zybuluo.mdeditor.initData = {
+            isLoggedIn: 'True',
+            isEditablePage: 'True',
+            isUrlMode: 'False',
+            currentId: '64041',
+            currentTitle: '在此处输入标题',
+            currentVersionId: '1',
+            isPublic: 'False',
+            anchorListString: 'None' === 'None' ? null : 'None',
+        };
+        // jiawzhang NOTICE: switch textarea and ace editor
+        window.lightMode = 'False' === 'True' ? true : false;
+    </script>
+
+    <script src="js/mdeditor.min.js"></script>
+
+    <script>
+        var globalUnverifiedEmailAlert = $('#global-unverified-email-alert');
+        $('#close-global-unverified-email-alert').on('click', function (event) {
+            event.preventDefault();
+            globalUnverifiedEmailAlert.alert('close');
+        });
+        // Resize window when close '#global-unverified-email-alert' to make sure the page UI is correct. such as mdeditor/user_note page and reset the location of the remark icons.
+        globalUnverifiedEmailAlert.bind('closed', function () {
+            setTimeout(function () {
+                $(window).resize();
+            }, 250);
+        });
+    </script>
+
+</body>
+</html>
+    
