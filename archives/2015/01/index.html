@@ -63,6 +63,76 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-stage3d-矩阵-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/18/stage3d-矩阵-1/" class="article-date">
+  <time datetime="2015-01-18T10:24:05.000Z" itemprop="datePublished">Jan 18 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/18/stage3d-矩阵-1/">矩阵</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个𝑚×𝑛矩阵𝐌是一个𝑚行、𝑛列的矩形实数数组。行和列的数量指定了矩阵的维数。矩阵中的数值称为元素。我们使用行和列组成的双下标𝑀ij 来标识矩阵元素,其中第1个下标指定了元素所在的行,第2个下标指定了元素所在的列。考虑如下矩阵:</p>
+<img src="/images/stage3d-矩阵-1/579B0483-30D1-4886-B5ED-1235BBFC8B88.png" class="[class names]">
+
+<ul>
+<li>矩阵A是一个4x4矩阵；矩阵B是一个3x2矩阵；矩阵u是一个1x3矩阵；矩阵v是一个4x1矩阵。</li>
+<li>A42表示矩阵A的第四行、第2列得元素。B21则表示矩阵B的第2行、第一列的元素。</li>
+<li>矩阵u和v是特殊矩阵，因为它们只包含一行或一列。我们有时将这种矩阵称为行向量或列向量,因为它们可以用矩阵的形式表示一个向量(例如,可以随意地将(𝑥,𝑦,𝑧)和[𝑥,𝑦,𝑧]互换使用,这两种记法都可用于表示向量)。</li>
+</ul>
+<h2 id="矩阵乘法">矩阵乘法</h2>
+<p>假设𝐀是一个𝑚×𝑛矩阵,𝐁是一个𝑛×𝑝矩阵,乘积𝐀𝐁由𝐂表示,则𝐂是一个𝑚×𝑝矩阵,其中结果𝐂的第𝑖𝑗个元素的值等于𝐀的第𝑖个行向量和𝐁的第𝑗个列向量的点积。值得注意的是,矩阵𝐀的列数必须与矩阵𝐁的行数相同,只有这样才能计算矩阵乘积𝐀𝐁,也就是说,𝐀中的行向量<br>的维数必须与𝐁中的列向量的维数相同。如果维数不同,那么是无法计算出结果矩阵的。如下图:</p>
+<img src="/images/stage3d-矩阵-1/92406933-4BFD-4EA4-9BDC-E77EFCEC99B6.png" class="[class names]"><br>计算过程如下图:<br><img src="/images/stage3d-矩阵-1/9929FF11-D643-4DE8-853C-14E870C692FC.png" class="[class names]">
+
+<h3 id="向量矩阵乘法">向量矩阵乘法</h3>
+<p>假设A是一个向量矩阵即一行N列。B是一个NxN矩阵。那么乘积的结果C仍然是一个1行N列的向量。这个对于后面的运算非常重要。</p>
+<h3 id="转置矩阵">转置矩阵</h3>
+<p>对一个矩阵的行和列进行互换,即可得到该矩阵的转置矩阵。一个𝑚×𝑛矩阵的转置矩阵是一个𝑛×𝑚矩阵。之前谈到向量矩阵乘法，用的是向量矩阵乘以矩阵的方式。但是我们仍然可以使用矩阵乘以向量矩阵。结果都一样但是方式不一样。如下图:</p>
+<img src="/images/stage3d-矩阵-1/E6BAEB1E-D930-453B-BC34-A7F31534B1C7.png" class="[class names]">
+
+<h2 id="单位矩阵">单位矩阵</h2>
+<p>有一种特殊的矩阵称为单位矩阵(identity matrix)。单位矩阵是一个正方形矩阵,它除了对角线上的元素为1外,其他元素均为0。如下图分别为2x2、3x3、4x4单位矩阵:</p>
+<img src="/images/stage3d-矩阵-1/A7EEA5E1-E386-4A84-BA8A-240E2585EFA3.png" class="[class names]"><br>结合到之前谈到的矩阵乘法定义。因为单位矩阵只有对角线为1，其它全为0。那么如果一个单位矩阵乘以其它矩阵，或者其他矩阵乘以一个单位矩阵时，结果仍然是该矩阵。如果A是一个𝑚×𝑛矩阵,B是一个𝑛×𝑝矩阵,I是一个𝑛×𝑛单位矩阵。那么AI=A。IB=B。<br><br>## 逆矩阵<br>矩阵代数中没有除法运算,但是它定义了一种乘法的逆(inverse)运算。逆矩阵有如下几个特点:<br><em>   只有𝑛×𝑛矩阵可以做逆运算。
+</em>   一个𝑛×𝑛的逆矩阵仍然是一个𝑛×𝑛矩阵。<br><em>   不是所有的𝑛×𝑛矩阵都有逆矩阵
+</em>   如果存在逆矩阵，那么这个逆矩阵是唯一的。<br>*   将一个矩阵与它的逆矩阵相乘，那么结果必定为单位矩阵。<br>逆矩阵在求解矩阵时，非常有用。例如:一个向量矩阵A乘以矩阵B得到向量矩阵C。那么这个时候就可以通过向量矩阵C乘以矩阵B逆矩阵得到向量矩阵A。<br><br><figure class="highlight actionscript3.0"><figcaption><span>示例</span><a href="https://github.com/BobLChen/boblchen.github.com/tree/master/samples/stage3d_%E7%9F%A9%E9%98%B5_1" target="_blank" rel="external">完整代码</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var origin : Vector3D = new Vector3D(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</div><div class="line">var <span class="keyword">matrix</span> : Matrix3D = new Matrix3D();</div><div class="line"><span class="keyword">matrix</span>.appendTranslation(-<span class="number">10</span>, -<span class="number">23</span>, -<span class="number">43</span>);</div><div class="line"><span class="keyword">matrix</span>.appendRotation(<span class="number">344</span>, Vector3D.X_AXIS);</div><div class="line"><span class="keyword">matrix</span>.appendRotation(<span class="number">34</span>,  Vector3D.Y_AXIS);</div><div class="line"><span class="keyword">matrix</span>.appendRotation(<span class="number">123</span>, Vector3D.Z_AXIS);</div><div class="line">var ret : Vector3D = <span class="keyword">matrix</span>.transformVector(origin);</div><div class="line"><span class="built_in">trace</span>(<span class="string">"1x4向量矩阵"</span>, origin, <span class="string">"乘以4x4矩阵结果:"</span>, ret);		</div><div class="line"><span class="built_in">trace</span>(<span class="string">"计算4x4逆矩阵"</span>);</div><div class="line"><span class="keyword">matrix</span>.invert();</div><div class="line"><span class="built_in">trace</span>(<span class="string">"结果向量矩阵"</span>, ret, <span class="string">"乘以4x4逆矩阵:"</span>, <span class="keyword">matrix</span>.transformVector(ret));</div></pre></td></tr></table></figure>
+
+<h2 id="stage3d_矩阵">stage3d 矩阵</h2>
+<p>在stage3d中使用了两种方式的矩阵，一种是正常的，另外一种是转置了的矩阵。在cpu层面,as3提供的api是正常矩阵，也是D3DX使用的矩阵。但是在gpu层面使用的经过转置的矩阵，也就是opengl使用矩阵。它们不同之处在于运算的时候，前者是右乘，后者则是左乘。</p>
+<h2 id="关于向量和矩阵">关于向量和矩阵</h2>
+<p>在3D编程中，向量和矩阵是最基础的只是。因为被大量用到。因此谈到3D时需要先谈一下向量和矩阵的概念以及向量和矩阵之间的关系。后面就会讲到向量以及矩阵在3D中运用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/18/stage3d-矩阵-1/" data-id="oswectdwzy0mrv1i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-stage3d-向量-0" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/18/stage3d-向量-0/" class="article-date">
@@ -104,7 +174,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/18/stage3d-向量-0/" data-id="owuwuw7nuakohxen" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/18/stage3d-向量-0/" data-id="pecl4yk3y3avw10i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -125,7 +195,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -134,7 +204,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -143,7 +213,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/3D/" style="font-size: NaNpx;">3D</a><a href="/tags/FLash3D/" style="font-size: NaNpx;">FLash3D</a><a href="/tags/Stage3D/" style="font-size: NaNpx;">Stage3D</a>
+      <a href="/tags/3D/" style="font-size: 20.00px;">3D</a><a href="/tags/FLash3D/" style="font-size: 20.00px;">FLash3D</a><a href="/tags/FLash3D-3D/" style="font-size: 10.00px;">FLash3D 3D</a><a href="/tags/Games/" style="font-size: 10.00px;">Games</a><a href="/tags/PS3/" style="font-size: 10.00px;">PS3</a><a href="/tags/Stage3D/" style="font-size: 20.00px;">Stage3D</a><a href="/tags/Stage3D-FLash3D-3D/" style="font-size: 10.00px;">Stage3D FLash3D 3D</a>
     </div>
   </div>
 
@@ -152,7 +222,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -162,6 +232,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/18/stage3d-矩阵-1/">矩阵</a>
+          </li>
         
           <li>
             <a href="/2015/01/18/stage3d-向量-0/">向量</a>
