@@ -63,6 +63,114 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-stage3d-3-模型基础概念" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/20/stage3d-3-模型基础概念/" class="article-date">
+  <time datetime="2015-01-20T11:26:27.000Z" itemprop="datePublished">Jan 20 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/20/stage3d-3-模型基础概念/">stage3d_3_初窥3d编程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="面">面</h1>
+<p>在3D游戏开发中最常用的面是三角形。因为三角形是最小的单位。再也不能找出比三角形更小的可以表示出一个面。例如：三角形是由三个点构成的，两个点只能构成一条线，但是线并不能表示一个面。</p>
+<h1 id="顶点">顶点</h1>
+<p>三角形是由三个点构成的，那么这三个点就称之为顶点。在3纬中，顶点的坐标用(x, y, z)表示。</p>
+<h1 id="网格">网格</h1>
+<p>很多个三角形就可以构成一个模型，这些三角形集合或者这个模型就称之为网格。如下图:</p>
+<img src="/images/stage3d_3_初窥3d编程/141F9A5E-2114-4DC8-A759-9D66D53A0C03.png" class="[class names]">
+
+<h1 id="Stage3D_显卡申请流程">Stage3D 显卡申请流程</h1>
+<ul>
+<li>配置页面参数。如果需要使用到gpu，那么就必须配置相关的页面参数，不然是无法获取到gpu。这里以flashbuilder为例。在html-template目录中，配置index.template.html。在params中新增一项-&gt;params.wmode = “direct”；在object标签对中都增加<param name="wmode" value="direct">标签。如下图:<img src="/images/stage3d_3_初窥3d编程/DE408AF2-B888-44C1-8396-68714368F106.png" class="[class names]"><br><img src="/images/stage3d_3_初窥3d编程/F78E8BDB-2A0B-42B8-B43A-1CD66C6CDA13.png" class="[class names]"></li>
+<li>stage3d为了跨平台，设置了许多标准，某些标准下面是无法使用较多的资源以及更高级的特性。因此我们在申请的时候会要求我们提供一个标准，默认使用的是baseline，也就是最基本的，可以满足所有平台，例如：手机、pad、pc等等。其实一共就俩标准。在某些设备上面其实是没有gpu的，那么这个时候stage3d就会回退到使用cpu来渲染3D。因此我们在申请使用3d的时候，我们也可以手动指定为使用软解模式。在平时的开发中，我们一般都是使用的AUTO模式，如果使用这个模式，stage3d会自动帮你选择到底是使用cpu渲染还是硬件加速。申请代码如下:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">Main</span><span class="params">()</span> </span>{</div><div class="line">	<span class="keyword">this</span>.stage.scaleMode = StageScaleMode.NO_SCALE;</div><div class="line">	<span class="keyword">this</span>.stage.align     = StageAlign.TOP_LEFT;</div><div class="line">	</div><div class="line">	stage.stage3Ds[<span class="number">0</span>].addEventListener(Event.CONTEXT3D_CREATE, onContext3DCreate);</div><div class="line">	stage.stage3Ds[<span class="number">0</span>].requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>如果我们成功申请到context,那么Event.CONTEXT3D_CREATE事件就会被触发。在stage3d中，stage3Ds一共有四层，其中0在最下层，3在最顶层。并且所有的3d层都是位于2d层下面。这里要注意的是，某些设备是不会有stage3ds列表的，2d永远都是在3d上面。当Event.CONTEXT3D_CREATE事件被触发之后，我们就可以在onContext3DCreate函数里面从我们申请的stage3d层里面获取到context3d。后面我们所有的操作是与这个context3d有关。由于stage3ds分了很多层，因此每一个stage3ds的context3d以及context3d他们所创建的内容是不能通用。通过context3D我们可以获取到最基本设备信息。代码如下:</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">onContext3DCreate</span><span class="params">(e : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">	<span class="keyword">this</span>.context3D = stage.stage3Ds[<span class="number">0</span>].context3D;</div><div class="line">	<span class="keyword">trace</span>(<span class="keyword">this</span>.context3D.driverInfo);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这里有一个非常坑爹的地方，就是无论是context3d的创建还是context3d的销毁。都会触发Event.CONTEXT3D_CREATE事件。但是context3d的销毁并不是所有设备都会触发，只是某些设备在特定情况下面会触发，然后context3D.driverInfo里面的信息就是”dispose”。stage3d如果发现context3d被销毁，那么stage3d会自动重新申请context3d。新申请到的context3D和原来是不一样得，它们之间的数据也是不能共享的。详细的api移步此处:</p>
+<a href="http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/display3D/Context3D.html" target="_blank" rel="external">context3d</a><br>*   gpu调试:我们是不能直接对gpu进行设置断点调试。我们仅仅只能侦听到我们传给gpu的数据或者使用方式是否错误。代码如下:<br><br><figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.context3D.enableErrorChecking = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
+
+<ul>
+<li>创建模型数据。上一篇矩阵变换中讲到了一个NDC的概念。GPU为了适配所有尺寸，规定范围为[-1, 1]区间。这个区间是从左到右，从下往上为[-1, 1]。然后谈到我们需要将模型转换到view空间并且投影到[-1, 1]区间内。现在我们暂时不转换模型到view空间，也不进行投影。我们手工进行投影。然后我们初始化模型数据为:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">meshVertexData = Vector.&lt;Number&gt;([</div><div class="line"><span class="comment">	//X,  Y,  Z,	</span></div><div class="line">	-<span class="ruby"><span class="number">1</span>, -<span class="number">1</span>,  <span class="number">0</span>, 	<span class="regexp">//</span> 左下角</span></div><div class="line">	 1, -1,  0, 	// 右下角</div><div class="line">	 1,  1,  0, 	// 右上角</div><div class="line">	-<span class="ruby"><span class="number">1</span>,  <span class="number">1</span>,  <span class="number">0</span>,		<span class="regexp">//</span> 左上角</span></div><div class="line">]);</div></pre></td></tr></table></figure>
+
+<p>我们现在初始化的是一个正方形。根据前面讲到最小的单位是三角形。那么一个正方形是由两个三角形构成，因此最少可以有四个顶点。但是我们现在有了四个顶点，并不知道三角形是如何构成的。因为在GPU里面，三个点构成的三角形ABC和BCA和ACB是不一样的。虽然都是三角形，但是GPU是严格根据三角形的顺序来进行渲染的。因此三角形的顺序不一样也导致了三角形不一样。因此虽然是四个点，但是可以构成多个三角形。下面我们就需要一个索引来告诉GPU我们的三角形是如何构成的：</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">meshIndexData </span>=<span class="string"> Vector.&lt;uint&gt;([0, 1, 2, 0, 2, 3,]);</span></div></pre></td></tr></table></figure>
+
+<p>这里的0, 1, 2, 3的索引严格对应meshVertexData里面的顶点。例如:0-&gt;-1, -1,  0；1-&gt;1, -1,  0；2-&gt;1,  1,  0；3-&gt;-1,  1,  0。一个三角形有三个顶点，那么就需要三个索引，这里的四边形是由两个三角形构成。因此索引数据有6条。0, 1, 2代表一个三角形，0, 2, 3代表一个三角形。</p>
+<ul>
+<li>上传。虽然我们初始化了一个模型，但是模型的数据是存在于内存里面的。gpu并没有得到模型的数据。因此我们需要上传对应的数据。这里我们需要上传两部分，一部分为网格数据，一部分为索引数据。</li>
+<li>上传网格数据:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vertexBuffer = context3D.createVertexBuffer(meshVertexData.<span class="built_in">length</span> / <span class="number">3</span>, <span class="number">3</span>);</div><div class="line">vertexBuffer.uploadFromVector(meshVertexData, <span class="number">0</span>, meshVertexData.<span class="built_in">length</span> / <span class="number">3</span>);</div></pre></td></tr></table></figure>
+
+<p>context3D.createVertexBuffer中第一个参数指定该网格有多少个顶点，这里谈到的顶点不光只包含坐标点，还包含一些其他数据。3指定每一个顶点的长度。因为meshVertexData只是一个数组。是一串数据，显卡其实并不知道我们定义每三个为一个坐标点。因此我们需要手动指定长度。这样meshVertexData这一串数据就会被分割为很多段。每一段的索引其实就和meshIndexData的索引一一对应。vertexBuffer.uploadFromVector(meshVertexData, 0, meshVertexData.length / 3);则是用于上传数据。第一个参数为数据本身，第二个为上传数据的起始段，因为我们可能只上传其中一段数据。为何会有这种情况？假如我们之前已经上传了一段完整的meshVertexData数据，但是随后我们出于某种原因修改其中一段数据，那么这个时候我们就不需要重新上传整段数据，我们只需要上传其中一个片段即可，以便节省性能。最后一个参数则是指定上传多少个顶点。</p>
+<ul>
+<li>上传索引数据:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">indexBuffer = context3D.createIndexBuffer(meshIndexData.<span class="built_in">length</span>);</div><div class="line">indexBuffer.uploadFromVector(meshIndexData, <span class="number">0</span>, meshIndexData.<span class="built_in">length</span>);</div></pre></td></tr></table></figure>
+
+<p>索引数据的上传则非常简单，直接上传即可。其中uploadFromVector中的第二个和第三个参数与uploadFromVector的功能一样。</p>
+<ul>
+<li>显卡指令:虽然我们上传了数据，但是gpu其实并不知道应该如何运用这部分数据。这个时候就需要我们对GPU进行编程。首先我们需要编写指令:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vertexShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, <span class="string">"mov op, va0\n"</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> fragmentShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, <span class="string">"mov oc, fc0\n"</span>);</div></pre></td></tr></table></figure>
+
+<p>我们使用的是可编程渲染管线。当然还有固定的渲染管线。AGALMiniAssembler是Adobe提供的一个将字符串转换为二进制指令的一个工具类。因为我们不可能直接进行编写二进制的指令。因此我们需要一个高级一点的语言。这个语言是Adobe给我们提供的称之为AGAL。虽然说它高级，但是它其实比汇编更加原始。试想一下，GPU得到的是面的数据。面是由三个点构成的，因此这个面其实只是三个点而已。GPU需要对这个面进行填色操作。因此GPU就分为两步，第一步是对顶点进行操作，当所有顶点操作完了之后，才进行填色操作。因此只有保证顶点是正确时候，才能正确的进行填色操作，这个填色的过程就称之为着色。因此GPU的指令分为顶点指令(vertex program)以及着色指令(fragment program)。Context3DProgramType则指定我们的指令是运用在哪一个过程。其中顶点指令:”mov op, va0\n”。其中op是最终接受顶点的寄存器，va0则是我们传入的数据。这里的意思就是将va0(我们传入的数据)直接赋值给op。着色程序:”mov oc, fc0\n”，其中oc是接受颜色的寄存器，fc0是一个常量寄存器，fc0的数据仍然是我们提供。最后我们需要将这两段字符串编译成二进制指令。这个过程仍然是在CPU中完成的，到了这一步，我们仍然没有显卡的指令程序无法与显卡进行通信，因此我们需要创建一个显卡的program并且将指令上传到显卡。如下:</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">shaderProgram </span>=<span class="string"> context3D.createProgram();</span></div><div class="line">shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);</div></pre></td></tr></table></figure>
+
+<ul>
+<li>创建缓冲区。虽然显卡规定的NDC空间的区间，但是最终显卡需要将渲染好的图像发送给显示器。显示器的大小固定。我们就需要知道显示器的显示的范围。代码如下:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">context3D.configureBackBuffer(stage.stageWidth, stage.stageHeight, <span class="number">0</span>, <span class="literal">true</span>);</div></pre></td></tr></table></figure>
+
+<p>其中第一个和第二个指定缓冲区的大小，第三个参数知道抗锯齿等级，第四个决定是否启用深度以及stencil。(第四个后面后详细谈到)。我们指定了缓冲区大小，那么这个缓冲区就会被映射到NDC空间。</p>
+<ul>
+<li>渲染。当我们准备完了所有工作之后。就可以开始渲染。代码如下:</li>
+</ul>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">addEventListener(Event.ENTER_FRAME, enterFrame);</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">enterFrame</span><span class="params">(event : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">	context3D.clear(<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">1</span>);</div><div class="line">	context3D.setProgram(shaderProgram);</div><div class="line">	context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, <span class="number">0</span>, Vector.&lt;Number&gt;([<span class="number">1.0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]));</div><div class="line">	context3D.setVertexBufferAt(<span class="number">0</span>, vertexBuffer, <span class="number">0</span>, Context3DVertexBufferFormat.FLOAT_3);</div><div class="line">	context3D.drawTriangles(indexBuffer, <span class="number">0</span>, meshIndexData.length / <span class="number">3</span>);</div><div class="line">	context3D.present();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>在enterFrame里面，我们首先会调用一次clear，因为在缓冲区里面存放的就是最终的颜色，如果我们不进行清除，那么上一次渲染的结果就会和本次的渲染结果相互影响。所以我们需要一个干净的缓冲区。然后我们设置显卡指令程序:context3D.setProgram(shaderProgram);给gpu上传着色程序的参数context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<number>([1.0, 0, 0, 1]));设置模型的数据:context3D.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);最后绘制出所有的三角形:context3D.drawTriangles(indexBuffer, 0, meshIndexData.length / 3);绘制玩之后然后显示出来:context3D.present();</number></li>
+</ul>
+<p>最终代码:</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/20/stage3d-3-模型基础概念/" data-id="pymeyoukbvlww1dy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-stage3d-2-变换" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/19/stage3d-2-变换/" class="article-date">
@@ -256,7 +364,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">3</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -265,7 +373,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -283,7 +391,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -293,6 +401,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/20/stage3d-3-模型基础概念/">stage3d_3_初窥3d编程</a>
+          </li>
         
           <li>
             <a href="/2015/01/19/stage3d-2-变换/">stage3d_2_变换</a>
