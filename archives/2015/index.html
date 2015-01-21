@@ -63,6 +63,83 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-stage3d-4-AGAL以及执行流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/" class="article-date">
+  <time datetime="2015-01-21T12:39:16.000Z" itemprop="datePublished">Jan 21 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AGAL_0">AGAL <a href="http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/display3D/Context3D.html" target="_blank" rel="external">什么是AGAL</a></h2>
+<p>AGAL在之前稍微说了一下，AGAL其实就是Adobe为了方便开发者，弄的一套高级一点的针对显卡指令的语言。opengl以及dx它们有更加高级的类C的着色语言，分别称之为GLSL、HLSL。而AGAL则更加偏类似于汇编。</p>
+<h2 id="寄存器">寄存器</h2>
+<p>如果写过汇编的就知道寄存器的概念，我不会详细解释。如果不知道的同学，可以将寄存器理解为一个Vector3D类型。一个寄存器有四个组件，这四个组件分别为x、y、z、w。这四个组件都是浮点类型。寄存器又分为很多类型。</p>
+<h3 id="属性寄存器va(只读)">属性寄存器va(只读)</h3>
+<p>这些寄存器存放的VertexBuffer的顶点数据，也就是存放VertexBuffer的段得数据。这里需要注意的是寄存器并不是存储VertexBuffer的所有数据，而且存储VertexBuffer中的某一段数据，为何是某一段？在下面讲执行流程时我就会说到。在baseline模式中(以下均以baseline为基础讲解)，属性寄存器只有8个。分别为va0,va1,va2….va7</p>
+<h3 id="顶点常量寄存器vc(只读)">顶点常量寄存器vc(只读)</h3>
+<p>上一节粗略降到显卡的执行流程分为两阶段。这里的顶点常量寄存器就是第一阶段中需要使用到的寄存器。这个寄存器是常量，既然是常量，那么它也是只读的。顶点的常量寄存器很多，一共有128个。分别为vc0,vc1,vc2….vc127。</p>
+<h3 id="顶点临时寄存器vt(读写)">顶点临时寄存器vt(读写)</h3>
+<p>顶点临时寄存器就是顶点着色程序中需要用到的临时变量。我们在编写着色语言时肯定是需要用到临时变量。这个时候我们就需要使用到临时变量寄存器。临时变量寄存器一共有8个。分别为vt0,vt1,vt2…vt7</p>
+<h3 id="片段常量寄存器fc(只读)">片段常量寄存器fc(只读)</h3>
+<p>片段常量寄存器是着色程序第二阶段的需要使用到的寄存器。一共有28个寄存器。分别为fc0,fc1,fc2…fc27</p>
+<h3 id="片段临时寄存器ft(读写)">片段临时寄存器ft(读写)</h3>
+<p>片段临时存器是着色程序第二阶段的需要使用到的临时寄存器器，一共有8个，分别为ft0,ft1,ft2…ft7</p>
+<h3 id="片段纹理采样器寄存器">片段纹理采样器寄存器</h3>
+<p>纹理采样寄存器对应着我们上传的贴图，我们传入的贴图被放入到了一个特殊的寄存器里面，我们会从这个寄存器里面获取到正确的贴图颜色。一共有8个。分别为fs0,fs1,fs2…fs7。纹理采样器一共8个，也就是说我们以最小的模型来说，假设这个模型是一个三角形。那么这个三角形最多可以运用8张贴图。</p>
+<h3 id="可变寄存器(顶点只写，片段只读)">可变寄存器(顶点只写，片段只读)</h3>
+<p>因为着色流程是先执行顶点程序，然后再执行着色程序。那么有时候我们需要从顶点程序传入数据到片段着色程序，在这个时候我们就需要用到可变寄存器。可变寄存器一共有8个，分别为v0,v1,v2,v3…v7。当然我们不可能从片段着色程序里面传入数据到顶点着色程序。因为这个过程本身就是不可逆的。注意：可变寄存器在顶点程序只能写入，在片段着色程序里面只能读取。</p>
+<h3 id="顶点输出寄存器op">顶点输出寄存器op</h3>
+<p>顶点输出寄存器专门用于顶点程序，接收最终的结果。</p>
+<h3 id="片段输出寄存器oc">片段输出寄存器oc</h3>
+<p>片段输出寄存器oc接收最终的颜色结果。</p>
+<h3 id="记忆方法:顶点着色程序(vertex_program)，以vertex开头字母v记忆，属性(attribute)寄存器就为va，临时寄存器(temp)就为vt，常量寄存器(const)就为vc。片段着色程序(fragment_program)，以fragment开头字母f记忆，临时寄存器(temp)为ft,常量寄存器(const)为ft，纹理采样寄存器(sample)为fs。可变寄存器(vary)为v。">记忆方法:顶点着色程序(vertex program)，以vertex开头字母v记忆，属性(attribute)寄存器就为va，临时寄存器(temp)就为vt，常量寄存器(const)就为vc。片段着色程序(fragment program)，以fragment开头字母f记忆，临时寄存器(temp)为ft,常量寄存器(const)为ft，纹理采样寄存器(sample)为fs。可变寄存器(vary)为v。</h3>
+<h2 id="AGAL操作指令1">AGAL操作指令<a href="http://help.adobe.com/zh_CN/as3/dev/WSd6a006f2eb1dc31e-310b95831324724ec56-8000.html" target="_blank" rel="external">AGAL指令</a></h2>
+<p>AGAL有大约30个不同的指令，不同的指令操作的寄存器数量不同。它们都遵循着=&gt;指令代码 目标寄存器 寄存器1 寄存器2 …例如mov指令:</p>
+<img src="/images/stage3d_4_AGAL以及执行流程/D29FA42F-8B59-42CD-858D-856F4A513589.png" class="[class names]"><br>根据描述，我们可以知道，它是将source寄存器的值移到destination寄存器上。例如:”mov vt0, vt1”。意思为：将顶点临时寄存器vt1的值赋值给顶点临时寄存器vt0。”mov ft0, fc1”:将片段常量寄存器fc1的值赋值给片段临时寄存器ft0。<br>mov指令只是操作两个寄存。有部分指令是操作三个寄存器。例如:<br>“add ft0, ft0, fc1”    =&gt; 将ft0的与fc1相加，然后赋值给ft0。等价于=&gt; ft0 = ft0 + fc1<br>“sub ft0, ft1, ft0” =&gt; ft0 = ft1 - ft0<br>“mul ft0, ft1, fc1” =&gt; ft0 = ft1 * fc1<br>……<br>其它指令跟这些指令的操作方式一样。agal在编写的时候需要注意一些注意事项，并且还有一些bug，后面我会在写到的时候提到。<br>### 组件操作<br>之前说到一个寄存器有四个组件，每个组件都是一个float类型。我们在agal中可以通过”寄存器” + “.” + “组件名称”的方式来访问。例如:<br>“add ft0.x, ft0.y, fc1.z”   =&gt; ft0.x = ft0.y + fc1.z<br>“add ft0.x, ft0.wz, fc1.zy” =&gt; ft0.x = ft0.w + fc1.z  =&gt; 注意当组件不够用时，要么自动补齐要么自动裁剪多余的。<br><br>## 执行流程<br>之前说到着色程序分为两个过程。这两个过程里面其实有分为很多过程。之前说到va寄存器并不是保存整个VertexBuffer暑假，而是保存VertexBuffer中的某一段数据。为了方便理解，我使用伪代码的形式来描述这两个过程，其中着色过程为:<br><br><figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">---------- 顶点着色过程 --------------</div><div class="line">data = Vector.&lt;Number&gt;([</div><div class="line">	//X,  Y,  Z,	</div><div class="line">	-<span class="number">1</span>, -<span class="number">1</span>,  <span class="number">0</span>, 	// 左下角</div><div class="line">	 <span class="number">1</span>, -<span class="number">1</span>,  <span class="number">0</span>, 	// 右下角</div><div class="line">	 <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">0</span>, 	// 右上角</div><div class="line">	-<span class="number">1</span>,  <span class="number">1</span>,  <span class="number">0</span>,		// 左上角</div><div class="line">]);</div><div class="line"></div><div class="line"><span class="keyword">for</span> (var i : int = <span class="number">0</span>; i &lt; data.length / <span class="number">3</span>; i++) {</div><div class="line">	// 赋值给顶点属性寄存器</div><div class="line">	va0 = (data[i * <span class="number">3</span> + <span class="number">0</span>], data[i * <span class="number">3</span> + <span class="number">1</span>], data[i * <span class="number">3</span> + <span class="number">2</span>], <span class="number">1.0</span>) 被着色器赋值</div><div class="line">	// 常量被赋值</div><div class="line">	const vc0, vc1, vc2 <span class="keyword">...</span> vc127 被着色器赋值。vc只能被读取</div><div class="line">	// 变量初始化</div><div class="line">	vt0,vt1,vt2 <span class="keyword">...</span> vt7 初始化，无法读取vt0,vt1,vt2...vt7但是可以写入。</div><div class="line">	// 使用变量</div><div class="line">	vt0,vt1,vt2 <span class="keyword">...</span> 被赋值过的vt0可以被读取。也可以被写入。</div><div class="line">	// 复杂的计算 <span class="keyword">...</span></div><div class="line">	op = 计算结果</div><div class="line">	// 传入数据到可变寄存器</div><div class="line">	v0, v1, v2 <span class="keyword">...</span> v7 = xxx</div><div class="line">}</div><div class="line">---------- 片段着色过程 --------------</div><div class="line"><span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; n; i++) {</div><div class="line">	// 常量被赋值</div><div class="line">	const fc0, fc1, fc2 <span class="keyword">...</span> fc27</div><div class="line">	// 变量初始化</div><div class="line">	ft0, ft1, ft2 <span class="keyword">...</span> 过程与顶点的变量一样</div><div class="line">	// 纹理寄存器被赋值</div><div class="line">	fs0, fs1, fs2 <span class="keyword">...</span> 被着色器赋值</div><div class="line">	复杂的计算 <span class="keyword">...</span></div><div class="line">	读取可变寄存器 <span class="keyword">...</span></div><div class="line">	oc = 计算结果</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这个过程不是非常严谨，只是为了方便理解。大家可以看到顶点过程其实是一个for循环，每一次遍历都是取的一段数据，这一段数据其实就是我们在上传的时候设置的:context3D.createVertexBuffer(meshVertexData.length / 3, 3);所有的寄存器都是在for循环里面被初始化，因此我们在顶点着色程序是无法知道前后片段的数据。这个对我们编写着色器是一个挑战。在gpu里面，gpu的核心一般都是几百个。因为顶点程序里面的每一次计算都跟前后段无关，因此这个过程被分割掉，同时把任务分配给这几百个核心一起并行计算。假设模型数据有500段，gpu核心有100个，那么这500段就会被gpu取出100段，分别交给这100个核心进行计算。当顶点程序处理完之后，才会进入到着色程序进行处理。着色程序会更久复杂，中间会有各种插值等等计算，计算的次数也是顶点着色程序的N倍。</p>
+<h3 id="重新理解上一节中的内容">重新理解上一节中的内容</h3>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vertexShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, <span class="string">"mov op, va0\n"</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> fragmentShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, <span class="string">"mov oc, fc0\n"</span>);</div></pre></td></tr></table></figure>
+
+<p>其中”mov op, va0\n”。则是将顶点坐标直接赋值给顶点输出寄存器，最终的顶点就是va0<br>其中”mov oc, fc0\n”。则是将常量值fc0当做颜色输出。常量的传入地方为:<br>context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<number>([1.0, 0, 0, 1]));<br>我们传入的颜色是1.0, 0, 0, 1。将rgb值除以256，就会得到对应的数据。那么这里其实就是传入的红色。</number></p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">addEventListener(Event.ENTER_FRAME, enterFrame);</div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">enterFrame</span><span class="params">(event : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">	context3D.clear(<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">1</span>);</div><div class="line">	context3D.setProgram(shaderProgram);</div><div class="line">	context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, <span class="number">0</span>, Vector.&lt;Number&gt;([<span class="number">1.0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]));</div><div class="line">	context3D.setVertexBufferAt(<span class="number">0</span>, vertexBuffer, <span class="number">0</span>, Context3DVertexBufferFormat.FLOAT_3);</div><div class="line">	context3D.drawTriangles(indexBuffer, <span class="number">0</span>, meshIndexData.length / <span class="number">3</span>);</div><div class="line">	context3D.present();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>enter frame函数里面<br>// 清除缓冲区<br>context3D.clear(0.2, 0.2, 0.2, 1);<br>// 指定着色器语言<br>context3D.setProgram(shaderProgram);<br>// 设置片段着色器fc0常量寄存器值第一个0表示使用哪一个常量寄存器<br>context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<number>([1.0, 0, 0, 1]));<br>// 设置顶点属性寄存器对应数据，第一个0表示va0，第二个0表示段数据中的偏移位置，FLOAT_3说明我们将使用段数据中3个数据。<br>context3D.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);<br>// 绘制三角形，第一个0说明三角形的起始三角形索引，meshIndexData.length / 3说明三角形的数量。<br>// 如果我们将0改为1，那么我们就只会看到第二个三角形<br>context3D.drawTriangles(indexBuffer, 0, meshIndexData.length / 3);<br>// 显示缓冲区的画面<br>context3D.present();</number></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/21/stage3d-4-AGAL以及执行流程/" data-id="fsvzs79w262p2bdf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-stage3d-3-模型基础概念" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/20/stage3d-3-模型基础概念/" class="article-date">
@@ -92,7 +169,7 @@
         <h1 id="面">面</h1>
 <p>在3D游戏开发中最常用的面是三角形。因为三角形是最小的单位。再也不能找出比三角形更小的可以表示出一个面。例如：三角形是由三个点构成的，两个点只能构成一条线，但是线并不能表示一个面。</p>
 <h1 id="顶点">顶点</h1>
-<p>三角形是由三个点构成的，那么这三个点就称之为顶点。在3纬中，顶点的坐标用(x, y, z)表示。</p>
+<p>三角形是由三个点构成的，那么这三个点就称之为顶点。在3维中，顶点的坐标用(x, y, z)表示。</p>
 <h1 id="网格">网格</h1>
 <p>很多个三角形就可以构成一个模型，这些三角形集合或者这个模型就称之为网格。如下图:</p>
 <img src="/images/stage3d_3_初窥3d编程/141F9A5E-2114-4DC8-A759-9D66D53A0C03.png" class="[class names]">
@@ -164,7 +241,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/20/stage3d-3-模型基础概念/" data-id="nbbugnr0tyx62jrn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/20/stage3d-3-模型基础概念/" data-id="ylr7h3swfwgyot1r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -225,7 +302,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/19/stage3d-2-变换/" data-id="olu4qe3t8envhixm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/19/stage3d-2-变换/" data-id="hi7eshcx4ai4xdzs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -295,7 +372,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/18/stage3d-矩阵-1/" data-id="9bgmpq66s8r7f1i9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/18/stage3d-矩阵-1/" data-id="ke4hon3s1unvenbf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -348,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/18/stage3d-向量-0/" data-id="45houmeaoafk84xa" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/18/stage3d-向量-0/" data-id="er22tv8sd358wqyj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -369,7 +446,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">4</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -378,7 +455,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -396,7 +473,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -406,6 +483,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
+          </li>
         
           <li>
             <a href="/2015/01/20/stage3d-3-模型基础概念/">stage3d_3_初窥3d编程</a>
