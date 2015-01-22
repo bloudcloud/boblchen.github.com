@@ -63,6 +63,81 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-stage3d-5-投影" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/22/stage3d-5-投影/" class="article-date">
+  <time datetime="2015-01-22T12:45:51.000Z" itemprop="datePublished">Jan 22 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="投影">投影</h1>
+<p>之前在demo中，正方形的数据如下:<br>meshData = Vector.<number>([<br>    //X,  Y,  Z,<br>    -1, -1,  0,     // 左下角<br>     1, -1,  0,     // 右下角<br>     1,  1,  0,     // 右上角<br>    -1,  1,  0,        // 左上角<br>]);<br>因为传递给GPU的数据已经是符合GPU NDC区间的值。但是在实际的开发中，模型的数据不可能是[-1, 1]区间的。这还只是模型的数据，如果还要做一些变换，例如左移10单位，缩放2倍，x轴旋转79°等等。那么势必会在cpu里面进行计算，然后在传递给GPU。但是模型的数据往往非常庞大，所以这个过程是非常不合理的。查阅AGAL的指令语法，可以发现AGAL支持矩阵的运算。我们将这个过程转移到GPU中去，交给GPU来计算，这样就减轻了CPU的负担。在<a href="http://boblchen.github.io/2015/01/19/stage3d-2-%E5%8F%98%E6%8D%A2/" target="_blank" rel="external">stage3d_2_变换</a>中提到模型空间、view空间、投影空间的概念。但是之前demo并没有使用到这个，现在在之前的demo基础上，增加模型空间、view空间、投影功能。使得我们可以模拟一个正常的3D环境。最终通过一些列的变换，坐标点数据就会被转换为符合GPU要求的数据。流程如下:<br>坐标点 -&gt; 转换到模型空间 -&gt; 转换到观察者空间 -&gt; 投影到NDC -&gt; 显示。<br>伪代码如下:<br>position <em> ModelMatrix </em> ViewMatrix * ProjectionMatrix</number></p>
+<h2 id="模型空间">模型空间</h2>
+<p>模型空间其实就代表了模型在世界坐标系中的状态，例如x轴缩放了2倍，y轴向上位移了10。那么一个坐标点乘以模型空间矩阵之后，这个坐标点就会在x轴上面缩放2倍，y轴向上位移了10单位。将所有模型的坐标点都乘以模型的空间，所有的坐标点都会进行这样一个变换。最终的效果就是，我们只需要简单的修改一下模型空间矩阵，就会达到模型在世界坐标系中的各种变换。</p>
+<h2 id="view空间">view空间</h2>
+<p>可以这样脑补一下，桌子上放着一个苹果，我们站在桌子面前，我们在前进、后退、转身等等一些行为之后，桌子上面的苹果在我们的视野中就会发生变化，但是实际上苹果还是那个苹果。。。它一点没有变。为了达到这个效果，就引入了view空间的概念，当进行模型空间变化之后，在进行一次view空间变化，如果修改view空间矩阵，那么view看到的所有模型也会发生变化。</p>
+<h2 id="投影-1">投影</h2>
+<p>在经过模型空间、view空间变化之后，变化之后的坐标点并不满足NDC的区间。因此需要将经过这两部变化之后的数据进行一次投影，使得投影之后的数据满足NDC空间的要求。我们还可以在投影矩阵上面进行一些加工，让这个矩阵拥有不同效果的投影功能。例如透视投影。</p>
+<h2 id="代码实现">代码实现</h2>
+<p>首先我们定义Model、View、Projection三个矩阵以及一个临时变量矩阵mvp。</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> projection 			: PerspectiveMatrix3D = <span class="keyword">new</span> PerspectiveMatrix3D();</div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> model 				: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> view 				: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> mvp				 	: Matrix3D = <span class="keyword">new</span> Matrix3D();</div></pre></td></tr></table></figure>
+
+<p>其中PerspectiveMatrix3D是由Adobe提供的一个透视投影的类，这个类继承了Matrix3D。但是。。。这个类有BUG。如果应用在实际的项目中，就会发生剧烈得抖动。然后我们定义投影矩阵，详细投影算法看前面推荐的链接。</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 75, stage.stageWidth / stage.stageHeight用于投影 0.1为近裁面，3000为远裁面，即看到的范围为[0.1, 3000]</span></div><div class="line">projection.perspectiveFieldOfViewLH(<span class="number">75</span>, stage.stageWidth / stage.stageHeight, <span class="number">0.1</span>, <span class="number">3000</span>);</div></pre></td></tr></table></figure>
+
+<p>其中perspectiveFieldOfViewLH表示使用左手系，左手系右手系区别如下:</p>
+<img src="/images/stage3d_5_变换投影/0.jpg" class="[class names]"><br>然后我们让相机(view)在z轴上移动-100个单位，如果我们不移动，那么我们就会看不到正方形，因为投影矩阵中近裁面的影响。<br><br><figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">view</span>.appendTranslation(<span class="number">0</span>, <span class="number">0</span>, -<span class="number">100</span>);</div><div class="line">// 因为看到的东西是反向，因此需要使用逆矩阵</div><div class="line"><span class="keyword">view</span>.<span class="built_in">invert</span>();</div></pre></td></tr></table></figure>
+
+<p>最后我们在enterFrame函数里面，将mvp矩阵组合起来</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 重置mvp为单位矩阵</div><div class="line">mvp.identity();</div><div class="line">mvp.<span class="built_in">append</span>(model);</div><div class="line">mvp.<span class="built_in">append</span>(<span class="keyword">view</span>);</div><div class="line">mvp.<span class="built_in">append</span>(projection);</div></pre></td></tr></table></figure>
+
+<p>然后我们将这个矩阵当成常量传递给顶点着色程序，并且修改顶点着色程序代码。</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">修改如下代码</div><div class="line"><span class="keyword">var</span> vertexShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, <span class="string">"mov op, va0\n"</span>);</div><div class="line">为:</div><div class="line"><span class="keyword">var</span> vertexShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, <span class="string">"m44 op, va0, vc0\n"</span>);</div><div class="line">查阅AGAL指令文档，可以看到m44指令就是矩阵乘法，m44 op, va0, vc0等价于:op = va0 乘以 vc0 矩阵(注意矩阵占用四个寄存器，实际上参与运算的是vc0, vc1, vc2, vc3。因为<span class="number">4</span>x4矩阵有<span class="number">16</span>个浮点，而一个寄存器只有四个浮点，因此需要用到<span class="number">4</span>个寄存器)</div><div class="line"><span class="comment">// 上传mvp矩阵 </span></div><div class="line"><span class="comment">// Context3DProgramType.VERTEX 表示传递给顶点着色程序，0表示使用vc0寄存器(其实是vc0, vc1, vc2, vc3)，mvp为传递的矩阵数据，true表示转置这个矩阵。在矩阵变换中说过，stage3d在cpu中使用的是行列式矩阵，而在GPU中使用的是列行矩阵，因此我们需要进行转置操作</span></div><div class="line">context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, <span class="number">0</span>, mvp, <span class="literal">true</span>);</div></pre></td></tr></table></figure>
+
+<p>最终代码如下:</p>
+<figure class="highlight actionscript3.0"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line"><span class="package"><span class="keyword">package</span> {</span></div><div class="line"></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> com.adobe.utils.AGALMiniAssembler;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> com.adobe.utils.PerspectiveMatrix3D;</span></div><div class="line">	</div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.Sprite;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.StageAlign;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.StageScaleMode;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DProfile;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DProgramType;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DRenderMode;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DVertexBufferFormat;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.IndexBuffer3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Program3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.VertexBuffer3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.events.Event;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.geom.Matrix3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.geom.Vector3D;</span></div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">Sprite</span> </span>{</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> context3D 			: Context3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> shaderProgram 		: Program3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> vertexBuffer 		: VertexBuffer3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> indexBuffer 		: IndexBuffer3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> meshVertexData 		: Vector.&lt;Number&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> meshIndexData 		: Vector.&lt;uint&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> projection 			: PerspectiveMatrix3D = <span class="keyword">new</span> PerspectiveMatrix3D();</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> model 				: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> view 				: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> mvp				 	: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line"></div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">Main</span><span class="params">()</span> </span>{</div><div class="line">			<span class="keyword">this</span>.stage.scaleMode = StageScaleMode.NO_SCALE;</div><div class="line">			<span class="keyword">this</span>.stage.align = StageAlign.TOP_LEFT;</div><div class="line"></div><div class="line">			stage.stage3Ds[<span class="number">0</span>].addEventListener(Event.CONTEXT3D_CREATE, onContext3DCreate);</div><div class="line">			stage.stage3Ds[<span class="number">0</span>].requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);</div><div class="line">		}</div><div class="line"></div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">onContext3DCreate</span><span class="params">(e : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>.context3D = stage.stage3Ds[<span class="number">0</span>].context3D;</div><div class="line">			<span class="keyword">this</span>.context3D.enableErrorChecking = <span class="literal">true</span>;</div><div class="line"></div><div class="line">			meshVertexData = Vector.&lt;Number&gt;([</div><div class="line">				<span class="comment">//X,  Y,  Z,	</span></div><div class="line">				-<span class="number">10</span>,  -<span class="number">10</span>,  <span class="number">0</span>, 	<span class="comment">// 左下角</span></div><div class="line">				<span class="number">10</span>,   -<span class="number">10</span>,  <span class="number">0</span>, 	<span class="comment">// 右下角</span></div><div class="line">				<span class="number">10</span>,    <span class="number">10</span>,  <span class="number">0</span>, 	<span class="comment">// 右上角</span></div><div class="line">				-<span class="number">10</span>,   <span class="number">10</span>,  <span class="number">0</span>,		<span class="comment">// 左上角</span></div><div class="line">			]);</div><div class="line">			</div><div class="line">			meshIndexData = Vector.&lt;uint&gt;([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>,]);</div><div class="line"></div><div class="line">			<span class="keyword">var</span> vertexShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">			vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, <span class="string">"m44 op, va0, vc0\n"</span>);</div><div class="line"></div><div class="line">			<span class="keyword">var</span> fragmentShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, <span class="string">"mov oc, fc0\n"</span>);</div><div class="line">			</div><div class="line">			shaderProgram = context3D.createProgram();</div><div class="line">			shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);</div><div class="line"></div><div class="line">			indexBuffer = context3D.createIndexBuffer(meshIndexData.length);</div><div class="line">			indexBuffer.uploadFromVector(meshIndexData, <span class="number">0</span>, meshIndexData.length);</div><div class="line"></div><div class="line">			vertexBuffer = context3D.createVertexBuffer(meshVertexData.length / <span class="number">3</span>, <span class="number">3</span>);</div><div class="line">			vertexBuffer.uploadFromVector(meshVertexData, <span class="number">0</span>, meshVertexData.length / <span class="number">3</span>);</div><div class="line">			</div><div class="line">			view.appendTranslation(<span class="number">0</span>, <span class="number">0</span>, -<span class="number">100</span>);</div><div class="line">			view.invert();</div><div class="line">			</div><div class="line">			projection.perspectiveFieldOfViewLH(<span class="number">75</span>, stage.stageWidth / stage.stageHeight, <span class="number">0.1</span>, <span class="number">3000</span>);</div><div class="line">			</div><div class="line">			</div><div class="line">			context3D.configureBackBuffer(stage.stageWidth, stage.stageHeight, <span class="number">0</span>, <span class="literal">true</span>);</div><div class="line"></div><div class="line">			addEventListener(Event.ENTER_FRAME, enterFrame);</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">enterFrame</span><span class="params">(event : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">			context3D.clear(<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">1</span>);</div><div class="line">			context3D.setProgram(shaderProgram);</div><div class="line">			</div><div class="line">			mvp.identity();</div><div class="line">			<span class="comment">// 让模型绕着z轴旋转</span></div><div class="line">			model.appendRotation(<span class="number">1</span>, Vector3D.Z_AXIS);</div><div class="line">			mvp.append(model);</div><div class="line">			mvp.append(view);</div><div class="line">			mvp.append(projection);</div><div class="line">			</div><div class="line">			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, <span class="number">0</span>, mvp, <span class="literal">true</span>);</div><div class="line">			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, <span class="number">0</span>, Vector.&lt;Number&gt;([<span class="number">1.0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]));</div><div class="line">			context3D.setVertexBufferAt(<span class="number">0</span>, vertexBuffer, <span class="number">0</span>, Context3DVertexBufferFormat.FLOAT_3);</div><div class="line">			context3D.drawTriangles(indexBuffer, <span class="number">0</span>, meshIndexData.length / <span class="number">3</span>);</div><div class="line">			context3D.present();</div><div class="line">		}</div><div class="line">		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<iframe src="http://boblchen.github.io/samples/stage3d_5_%E6%8A%95%E5%BD%B1/bin-debug/Main.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/22/stage3d-5-投影/" data-id="92ddeen13kdzo44k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-stage3d-4-AGAL以及执行流程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/" class="article-date">
@@ -128,7 +203,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/21/stage3d-4-AGAL以及执行流程/" data-id="fsvzs79w262p2bdf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/21/stage3d-4-AGAL以及执行流程/" data-id="411kawo8fyvimnq9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -241,7 +316,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/20/stage3d-3-模型基础概念/" data-id="ylr7h3swfwgyot1r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/20/stage3d-3-模型基础概念/" data-id="jcusp0ib5a1ox1m2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -302,7 +377,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/19/stage3d-2-变换/" data-id="hi7eshcx4ai4xdzs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/19/stage3d-2-变换/" data-id="x3xpqnog8xoq52ru" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -372,7 +447,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/18/stage3d-矩阵-1/" data-id="ke4hon3s1unvenbf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/18/stage3d-矩阵-1/" data-id="16b4suhxi9132yt1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -425,7 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/18/stage3d-向量-0/" data-id="er22tv8sd358wqyj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/18/stage3d-向量-0/" data-id="nkwu2b62x97z56ad" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -446,7 +521,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">5</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">6</span></li></ul>
     </div>
   </div>
 
@@ -455,7 +530,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">5</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">6</span></li></ul>
     </div>
   </div>
 
@@ -473,7 +548,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">6</span></li></ul>
     </div>
   </div>
 
@@ -483,6 +558,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
+          </li>
         
           <li>
             <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
@@ -498,10 +577,6 @@
         
           <li>
             <a href="/2015/01/18/stage3d-矩阵-1/">矩阵</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/18/stage3d-向量-0/">向量</a>
           </li>
         
       </ul>
