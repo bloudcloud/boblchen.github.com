@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>stage3d_6_纹理 | Hello World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="纹理
+纹理也称为贴图。之前的demo里面给出的方块就是一个纯色的。但是在实际的开发中，模型往往不是纯色的，一般都是有各种颜色，然后就可以非常真实的模拟真实世界中的物体。例如如下英雄连萌中的亚索贴图:
+其实贴图就是一张非常普通的图片。但是这个图片的内容看起来非常诡异。几乎无法分辨出图片的内容。既然贴图是一张2D的图片，那么它是如何与3D结合使用的？# UV坐标2D纹理需要和3D模型结果起来，就需要一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stage3d_6_纹理">
+<meta property="og:url" content="http://yoursite.com/2015/01/23/stage3d-6-纹理/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="纹理
+纹理也称为贴图。之前的demo里面给出的方块就是一个纯色的。但是在实际的开发中，模型往往不是纯色的，一般都是有各种颜色，然后就可以非常真实的模拟真实世界中的物体。例如如下英雄连萌中的亚索贴图:
+其实贴图就是一张非常普通的图片。但是这个图片的内容看起来非常诡异。几乎无法分辨出图片的内容。既然贴图是一张2D的图片，那么它是如何与3D结合使用的？# UV坐标2D纹理需要和3D模型结果起来，就需要一">
+<meta property="og:image" content="/images/stage3d_6_纹理/Yasuo_base_TX_CM.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/5B1C8080-27B7-4B18-80D1-FAA748A3EC44.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/A8A1AFAA-9F03-4474-9EA5-84A21DA2540F.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/123.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/19713247-C4F3-49D4-BD1F-3D1751062B5F.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/30203EA6-081F-4DC1-A452-722E3C72BABE.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/6DEC7771-5213-4655-B2FD-9727F2DE533E.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/03159EF1-605F-40B8-8975-90F46DF8AFC9.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/56753BA1-667E-4001-B83E-D96D7E132851.png">
+<meta property="og:image" content="/images/stage3d_6_纹理/45D3AA33-05E6-4123-AF3D-08A8D9535F87.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stage3d_6_纹理">
+<meta name="twitter:description" content="纹理
+纹理也称为贴图。之前的demo里面给出的方块就是一个纯色的。但是在实际的开发中，模型往往不是纯色的，一般都是有各种颜色，然后就可以非常真实的模拟真实世界中的物体。例如如下英雄连萌中的亚索贴图:
+其实贴图就是一张非常普通的图片。但是这个图片的内容看起来非常诡异。几乎无法分辨出图片的内容。既然贴图是一张2D的图片，那么它是如何与3D结合使用的？# UV坐标2D纹理需要和3D模型结果起来，就需要一">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hello World</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stage3d-6-纹理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/23/stage3d-6-纹理/" class="article-date">
+  <time datetime="2015-01-23T15:35:25.000Z" itemprop="datePublished">Jan 23 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stage3d_6_纹理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="纹理">纹理</h1>
+<p>纹理也称为贴图。之前的demo里面给出的方块就是一个纯色的。但是在实际的开发中，模型往往不是纯色的，一般都是有各种颜色，然后就可以非常真实的模拟真实世界中的物体。例如如下英雄连萌中的亚索贴图:</p>
+<img src="/images/stage3d_6_纹理/Yasuo_base_TX_CM.png" class="[class names]"><br>其实贴图就是一张非常普通的图片。但是这个图片的内容看起来非常诡异。几乎无法分辨出图片的内容。既然贴图是一张2D的图片，那么它是如何与3D结合使用的？<br><br># UV坐标<br><br>2D纹理需要和3D模型结果起来，就需要一组坐标来定位像素，告诉3D坐标点对应着哪一个像素，由于纹理是2D的，因此坐标也是2D的。由于图片的尺寸多种多样，例如1x1、2x2、4x4、8x8等等，为了让这个坐标适配所有的图片尺寸，采用了和NDC空间坐标类似的概念，在【正常】情况下纹理坐标(UV)从左至右为[0, 1]，从上至下为[0, 1]。这样无论图片多大，最右边的一定是1，最下边的一定是1。纹理坐标轴在图片的左上角，横向为U轴，纵向为V轴。如图所示:<br><img src="/images/stage3d_6_纹理/5B1C8080-27B7-4B18-80D1-FAA748A3EC44.png" class="[class names]"><br>我们只需要在3D模型中每一个坐标点指定一个对应的纹理坐标，就可以将整个纹理按照这个坐标将像素包裹在3D模型上面。例如之前的mode，那个正方形。如果我们在正方形的左上角顶点指定(0, 0)纹理坐标，右上角顶点指定(1, 0)坐标，左下角指定(0, 1)坐标，右下角指定(1, 1)纹理坐标。那么这个图片刚好可以映射到正方形上面，那么这个正方形的最终效果就是一个木箱的一面。如果我们使用6个这个的正方形拼凑起来，就可以拼凑出一个如下图所示的木箱模型。<br><img src="/images/stage3d_6_纹理/A8A1AFAA-9F03-4474-9EA5-84A21DA2540F.png" class="[class names]"><br>也许有同学会问，为毛一个正方形就指定了四个点的纹理坐标，正方形中间是如何显示出来的。其实在我们指定了四个点的纹理坐标之后，GPU在片段着色阶段，会根据每一个三角进行着色，着色的过程中会在两个顶点之间的纹理进行插值处理。这也即是为何在之前说到片段着色程序的运行次数是顶点着色程序的几十几百倍的原因了。如下图(下图中使用的是另一个纹理坐标系，我们在遇到这种纹理坐标系时，只需要做一个(u, 1-v)的处理就可):<br><img src="/images/stage3d_6_纹理/123.png" class="[class names]">
+
+<h2 id="过滤器">过滤器</h2>
+<h3 id="倍增">倍增</h3>
+<p>纹理贴图元素应该被视为在一个连续图像上的离散颜色采样;不应该被视为矩形区域。如果当观察点离场景中的一面墙很近时,墙会被放大,以至于会盖住整个屏幕。如果显示器的分辨率为 1024×1024,墙体纹理的分辨率为256×256,那么就会出现倍增问题——我们将要用很少的纹理元素来覆盖很多的像素。在本例中,每个纹理元素要覆盖4 个像素。当顶点纹理坐标在三角形表面上进行插值时,每个像素都会得到一对唯一的纹理坐标。所以,像素的纹理坐标不会与任何一个纹理元素点对应。我们可以使用插值方法来估算纹理 元素之间的颜色。GPU提供了两种插值方法:常量插值和线性插值。线性插值是我们最常用的插值方法。</p>
+<h4 id="常量插值(nearest)">常量插值(nearest)</h4>
+<p>常量插值也称为最近点采样,因为它总是用最近的纹理元素的值作为采样结果。因此它的效果非常高，但是在会出现明显的块状。如下图:</p>
+<img src="/images/stage3d_6_纹理/19713247-C4F3-49D4-BD1F-3D1751062B5F.png" class="[class names]">
+
+<h4 id="双线性插值(bilinear)">双线性插值(bilinear)</h4>
+<p>线性插值就是在两个元素点之间进行插值。双线性插值其实就在U和V上面分别进行一次线性插值。双线性插值效果会比常量插值高出很多倍，但是性能没有常量插值高效。如下图:</p>
+<img src="/images/stage3d_6_纹理/30203EA6-081F-4DC1-A452-722E3C72BABE.png" class="[class names]">
+
+<h2 id="缩减">缩减</h2>
+<p>缩减与倍增的情况刚好相反。在缩减中,较多的纹理元素会被映射为较少的像素。例如:我们将一幅256×256的纹理映射到墙体上。然后把观察点对准墙体,并向后移动观察点,使墙体逐渐变小,直到墙体在屏幕上只占64×64的像素区域为止。现在,我们要把256×256个纹理元素映射为64×64个屏幕像素。在这一情景中,像素的纹理坐标不会与纹理贴图中的任何一个纹理元素对应。常量和线性插 值过滤器仍然适用于缩减情况。不过,缩减的处理工作稍多一些。简单的讲,我们要把256×256个纹理元素均匀缩减为64×64个纹理元素。多级渐近贴图映射(mipmapping)为此提供了一种估值手段,但是需要额外占用一些内存。</p>
+<h3 id="mip">mip</h3>
+<p>我们提供gpu不同略缩版的贴图。然后gpu去寻找不同略缩版的贴图，并进行插值进行显示。例如:前面提到的256x256纹理。如果我们提供128x128、64x64、32x32、16x16、8x8、4x4、2x2、1x1等略缩尺寸的该贴图给GPU。当GPU遇到前面提到墙体在屏幕上只占64x64的像素区域时。GPU就会直接将我们上传的64x64版本的贴图显示出来。这样就能保证我们在距离足够远时，看到的图像仍然是正常的。如下图:</p>
+<img src="/images/stage3d_6_纹理/6DEC7771-5213-4655-B2FD-9727F2DE533E.png" class="[class names]">
+
+<h3 id="插值">插值</h3>
+<p>如果之前提到的256x256不是缩减到64x64，而且缩减到50x50。那么这个时候GPU就会进行插值处理。</p>
+<h4 id="常量插值">常量插值</h4>
+<p>常量插值就是选择最近的略缩纹理进行插值，例如选择64x64进行插值。</p>
+<h4 id="线性插值">线性插值</h4>
+<p>线性插值会选择最近的两个略缩图进行线性插值，例如在64x64与32x32之间进行线性插值。</p>
+<h2 id="各向异性过滤">各向异性过滤</h2>
+<p>在AGAL1中不支持，在AGAL2中支持。当摄像机与面的法线垂直时,图像会失真。而各向异性过滤则是缓解这种情况引起的失真问题。</p>
+<h2 id="环绕模式">环绕模式</h2>
+<h3 id="重复寻址(repeat)">重复寻址(repeat)</h3>
+<p>在UV中谈到，一般情况下UV的坐标点是从[0, 1]范围。但是某些情况下面，这种并不能满足我们的需求。例如一个墙砖，一个1000x1000的正方形，如果我们的纹理图案为几百个重复的墙砖图案，这样虽然能够解决问题。但是重复绘制几百个图案到一张纹理上，无意是一项无意义苦力活。在我们的设想中，如果我们只用只有一个墙砖图案的纹理就可以重复出很多个墙砖就可以节省很多工作。GPU提供了重复寻址的模式，即在每个整点连接处重复图像扩展纹理。如下图:</p>
+<img src="/images/stage3d_6_纹理/03159EF1-605F-40B8-8975-90F46DF8AFC9.png" class="[class names]"><br><img src="/images/stage3d_6_纹理/56753BA1-667E-4001-B83E-D96D7E132851.png" class="[class names]">
+
+<h3 id="截取模式(clamp)">截取模式(clamp)</h3>
+<p>截图模式一般使用的非常少，截图模式的算法我不清楚。如下图:</p>
+<img src="/images/stage3d_6_纹理/45D3AA33-05E6-4123-AF3D-08A8D9535F87.png" class="[class names]">
+
+<h3 id="其它模式">其它模式</h3>
+<p>其实还有一些其它模式、例如镜像(和截取很像)，边框等等模式，但是stage3d不支持。</p>
+<h1 id="纹理采样">纹理采样</h1>
+<p>我们在片段着色程序中，如果想要取出纹理中的颜色，我们就需要使用到采样。我们根据UV坐标点，从纹理中对应的坐标中获取到颜色。在AGAl中，纹理采样的指令为”tex”。我们需要为采样指令指定 倍增过滤器、缩减过滤器、寻址模式以及贴图格式。例如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ft0:临时寄存器</span></div><div class="line"><span class="comment">// ft1:uv坐标点存放在ft1临时寄存器中</span></div><div class="line"><span class="comment">// fs0:纹理对应的寄存器</span></div><div class="line"><span class="comment">// 2d:使用2D贴图，还有一种cube格式。其实还有一个3d，"3d"出现在了AGALMiniAssembler，但是在Adobe的文档中看不到这个家伙。</span></div><div class="line"><span class="comment">// linear:倍增使用线性过滤</span></div><div class="line"><span class="comment">// miplinear:启用缩减线性过滤。注意:如果启用了缩减线性过滤，那么一定要上传各个略缩版本的纹理图。</span></div><div class="line"><span class="comment">// repeat:使用重复寻址模式</span></div><div class="line">tex ft0, ft1.xy, fs0 &lt;<span class="number">2</span>d, linear, miplinear, <span class="keyword">repeat</span>&gt;</div><div class="line"></div><div class="line"><span class="comment">// 不开启缩减线性过滤</span></div><div class="line">tex ft0, ft1.xy, fs0 &lt;<span class="number">2</span>d, linear, mipnone, <span class="keyword">repeat</span>&gt;</div><div class="line"></div><div class="line"><span class="comment">// 不开启倍增线性过滤，但是开启缩减常量过滤</span></div><div class="line">tex ft0, ft1.xy, fs0 &lt;<span class="number">2</span>d, nearest, mipnearest, <span class="keyword">repeat</span>&gt;</div><div class="line"></div><div class="line"><span class="comment">// 其它一些使用参考AGAL指令文档</span></div></pre></td></tr></table></figure>
+
+<h1 id="修改Demo">修改Demo</h1>
+<p>最后我们修改我们的demo，让我们的正方形可以显示出图片。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div></pre></td><td class="code"><pre><div class="line"><span class="package"><span class="keyword">package</span> {</span></div><div class="line"></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> com.adobe.utils.AGALMiniAssembler;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> com.adobe.utils.PerspectiveMatrix3D;</span></div><div class="line">	</div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.BitmapData;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.Sprite;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.StageAlign;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.StageScaleMode;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DProfile;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DProgramType;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DRenderMode;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DTextureFormat;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Context3DVertexBufferFormat;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.IndexBuffer3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.Program3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.VertexBuffer3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display3D.textures.Texture;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.events.Event;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.geom.Matrix;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.geom.Matrix3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.geom.Vector3D;</span></div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">Sprite</span> </span>{</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> context3D 		: Context3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> shaderProgram 	: Program3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> vertexBuffer 	: VertexBuffer3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> indexBuffer 	: IndexBuffer3D;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> meshVertexData 	: Vector.&lt;Number&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> meshIndexData 	: Vector.&lt;uint&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> projection 		: PerspectiveMatrix3D = <span class="keyword">new</span> PerspectiveMatrix3D();</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> model 			: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> view 			: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> mvp				: Matrix3D = <span class="keyword">new</span> Matrix3D();</div><div class="line">		<span class="comment">// 增加texture定义		</span></div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> texture			: Texture;</div><div class="line">		[Embed(source=<span class="string">"1.jpg"</span>)]</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> IMG : Class;</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">Main</span><span class="params">()</span> </span>{</div><div class="line">			<span class="keyword">this</span>.stage.scaleMode = StageScaleMode.NO_SCALE;</div><div class="line">			<span class="keyword">this</span>.stage.align = StageAlign.TOP_LEFT;</div><div class="line"></div><div class="line">			stage.stage3Ds[<span class="number">0</span>].addEventListener(Event.CONTEXT3D_CREATE, onContext3DCreate);</div><div class="line">			stage.stage3Ds[<span class="number">0</span>].requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);</div><div class="line">		}</div><div class="line"></div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">onContext3DCreate</span><span class="params">(e : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>.context3D = stage.stage3Ds[<span class="number">0</span>].context3D;</div><div class="line">			<span class="keyword">this</span>.context3D.enableErrorChecking = <span class="literal">true</span>;</div><div class="line">			</div><div class="line">			<span class="comment">// 增加UV坐标</span></div><div class="line">			meshVertexData = Vector.&lt;Number&gt;([</div><div class="line">				<span class="comment">//X,  Y,  Z,	U,	V</span></div><div class="line">				-<span class="number">10</span>,  -<span class="number">10</span>,  <span class="number">0</span>, 	<span class="number">0</span>,  <span class="number">1</span>,		<span class="comment">// 左下角</span></div><div class="line">				 <span class="number">10</span>,  -<span class="number">10</span>,  <span class="number">0</span>, 	<span class="number">1</span>,	<span class="number">1</span>,		<span class="comment">// 右下角</span></div><div class="line">				 <span class="number">10</span>,   <span class="number">10</span>,  <span class="number">0</span>, 	<span class="number">1</span>,	<span class="number">0</span>,		<span class="comment">// 右上角</span></div><div class="line">				-<span class="number">10</span>,   <span class="number">10</span>,  <span class="number">0</span>,	<span class="number">0</span>,	<span class="number">0</span>		<span class="comment">// 左上角</span></div><div class="line">			]);</div><div class="line">			</div><div class="line">			meshIndexData = Vector.&lt;uint&gt;([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>,]);</div><div class="line"></div><div class="line">			<span class="keyword">var</span> vertexShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">			<span class="comment">// 修改顶点着色器代码，将UV坐标当做变量传递给片段着色程序</span></div><div class="line">			vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, <span class="string">"m44 op, va0, vc0\n"</span> + <span class="string">"mov v0, va1\n"</span>);</div><div class="line"></div><div class="line">			<span class="keyword">var</span> fragmentShaderAssembler : AGALMiniAssembler = <span class="keyword">new</span> AGALMiniAssembler();</div><div class="line">			<span class="comment">// 片段着色程序中接收顶点程序传递过来的UV坐标，根据UV坐标对纹理进行采样</span></div><div class="line">			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, <span class="string">"tex oc, v0, fs0 &lt;2d, linear, miplinear, repeat&gt;\n"</span>);</div><div class="line">			</div><div class="line">			shaderProgram = context3D.createProgram();</div><div class="line">			shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);</div><div class="line"></div><div class="line">			indexBuffer = context3D.createIndexBuffer(meshIndexData.length);</div><div class="line">			indexBuffer.uploadFromVector(meshIndexData, <span class="number">0</span>, meshIndexData.length);</div><div class="line">			</div><div class="line">			<span class="comment">// 顶点buffer每一段有五个数据，前面三个为顶点，后面两个为UV坐标</span></div><div class="line">			vertexBuffer = context3D.createVertexBuffer(meshVertexData.length / <span class="number">5</span>, <span class="number">5</span>);</div><div class="line">			vertexBuffer.uploadFromVector(meshVertexData, <span class="number">0</span>, meshVertexData.length / <span class="number">5</span>);</div><div class="line">			</div><div class="line">			view.appendTranslation(<span class="number">0</span>, <span class="number">0</span>, -<span class="number">100</span>);</div><div class="line">			view.invert();</div><div class="line">			</div><div class="line">			projection.perspectiveFieldOfViewLH(<span class="number">75</span>, stage.stageWidth / stage.stageHeight, <span class="number">0.1</span>, <span class="number">3000</span>);</div><div class="line">			</div><div class="line">			<span class="comment">// 创建纹理</span></div><div class="line">			texture = context3D.createTexture(<span class="number">1024</span>, <span class="number">1024</span>, Context3DTextureFormat.BGRA, <span class="literal">false</span>);</div><div class="line">			<span class="comment">// 上传mip纹理</span></div><div class="line">			<span class="keyword">var</span> bmp : BitmapData = <span class="keyword">new</span> IMG().bitmapData;</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> ws : int = bmp.width;</div><div class="line">			<span class="keyword">var</span> hs : int = bmp.height;</div><div class="line">			<span class="keyword">var</span> level : int = <span class="number">0</span>;</div><div class="line">			<span class="keyword">var</span> tmp   : BitmapData = <span class="literal">null</span>;</div><div class="line">			<span class="keyword">var</span> transform : Matrix = <span class="keyword">new</span> Matrix();</div><div class="line">			</div><div class="line">			tmp = <span class="keyword">new</span> BitmapData(ws, hs, <span class="literal">true</span>, <span class="number">0x00000000</span>);</div><div class="line">			</div><div class="line">			<span class="keyword">while</span> (ws &gt;= <span class="number">1</span> && hs &gt;= <span class="number">1</span>) { </div><div class="line">				tmp.draw(bmp, transform, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">true</span>); </div><div class="line">				texture.uploadFromBitmapData(tmp, level);			<span class="comment">// 上传略缩版贴图</span></div><div class="line">				trace(<span class="string">"尺寸:"</span>, tmp.width, tmp.height, <span class="string">"mip:"</span>, level);</div><div class="line">				transform.scale(<span class="number">0.5</span>, <span class="number">0.5</span>);							<span class="comment">// 缩放图片</span></div><div class="line">				level++;</div><div class="line">				ws &gt;&gt;= <span class="number">1</span>;</div><div class="line">				hs &gt;&gt;= <span class="number">1</span>;</div><div class="line">				<span class="keyword">if</span> (hs && ws) {</div><div class="line">					tmp.dispose();</div><div class="line">					tmp = <span class="keyword">new</span> BitmapData(ws, hs, <span class="literal">true</span>, <span class="number">0x00000000</span>);</div><div class="line">				}</div><div class="line">			}</div><div class="line">			tmp.dispose();</div><div class="line">			</div><div class="line">			context3D.configureBackBuffer(stage.stageWidth, stage.stageHeight, <span class="number">0</span>, <span class="literal">true</span>);</div><div class="line"></div><div class="line">			addEventListener(Event.ENTER_FRAME, enterFrame);</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">enterFrame</span><span class="params">(event : Event)</span> <span class="type">: void</span> </span>{</div><div class="line">			context3D.clear(<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">1</span>);</div><div class="line">			context3D.setProgram(shaderProgram);</div><div class="line">			</div><div class="line">			mvp.identity();</div><div class="line">			<span class="comment">// 让模型绕着z轴旋转</span></div><div class="line">			model.appendRotation(<span class="number">1</span>, Vector3D.Z_AXIS);</div><div class="line">			mvp.append(model);</div><div class="line">			mvp.append(view);</div><div class="line">			mvp.append(projection);</div><div class="line">			</div><div class="line">			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, <span class="number">0</span>, mvp, <span class="literal">true</span>);</div><div class="line">			<span class="comment">// 设置纹理</span></div><div class="line">			context3D.setTextureAt(<span class="number">0</span>, texture);</div><div class="line">			<span class="comment">// 设置每一段前面三个数据为va0</span></div><div class="line">			context3D.setVertexBufferAt(<span class="number">0</span>, vertexBuffer, <span class="number">0</span>, Context3DVertexBufferFormat.FLOAT_3);</div><div class="line">			<span class="comment">// 设置每一段后面两个数据为va1</span></div><div class="line">			context3D.setVertexBufferAt(<span class="number">1</span>, vertexBuffer, <span class="number">3</span>, Context3DVertexBufferFormat.FLOAT_2);</div><div class="line">			context3D.drawTriangles(indexBuffer, <span class="number">0</span>, meshIndexData.length / <span class="number">3</span>);</div><div class="line">			context3D.present();</div><div class="line">		}</div><div class="line">		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<iframe src="http://boblchen.github.io/samples/stage3d_6_%E7%BA%B9%E7%90%86/bin-debug/Main.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/23/stage3d-6-纹理/" data-id="xjsfm4v9ymwwh2gt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/01/22/stage3d-5-投影/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">stage3d_5_变换投影</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/3D/" style="font-size: NaNpx;">3D</a><a href="/tags/FLash3D/" style="font-size: NaNpx;">FLash3D</a><a href="/tags/Stage3D/" style="font-size: NaNpx;">Stage3D</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/01/23/stage3d-6-纹理/">stage3d_6_纹理</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/20/stage3d-3-模型基础概念/">stage3d_3_初窥3d编程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/19/stage3d-2-变换/">stage3d_2_变换</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 小朋友<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>
