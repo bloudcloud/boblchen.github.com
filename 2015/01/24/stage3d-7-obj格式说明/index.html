@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>stage3d_7_加载obj模型 | Hello World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="OBJ文件是Alias|Wavefront公司为它的一套基于工作站的3D建模和动画软件”Advanced Visualizer”开发的一种标准3D模型文件格式，很适合用于3D软件模型之间的互导，也可以通过Maya读写。比如你在3dsMax或LightWave中建了一个模型，想把它调到Maya里面渲染或动画，导出OBJ文件就是一种很好的选择。目前几乎所有知名的3D软件都支持OBJ文件的读写，不过其中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stage3d_7_加载obj模型">
+<meta property="og:url" content="http://yoursite.com/2015/01/24/stage3d-7-obj格式说明/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="OBJ文件是Alias|Wavefront公司为它的一套基于工作站的3D建模和动画软件”Advanced Visualizer”开发的一种标准3D模型文件格式，很适合用于3D软件模型之间的互导，也可以通过Maya读写。比如你在3dsMax或LightWave中建了一个模型，想把它调到Maya里面渲染或动画，导出OBJ文件就是一种很好的选择。目前几乎所有知名的3D软件都支持OBJ文件的读写，不过其中">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stage3d_7_加载obj模型">
+<meta name="twitter:description" content="OBJ文件是Alias|Wavefront公司为它的一套基于工作站的3D建模和动画软件”Advanced Visualizer”开发的一种标准3D模型文件格式，很适合用于3D软件模型之间的互导，也可以通过Maya读写。比如你在3dsMax或LightWave中建了一个模型，想把它调到Maya里面渲染或动画，导出OBJ文件就是一种很好的选择。目前几乎所有知名的3D软件都支持OBJ文件的读写，不过其中">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hello World</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stage3d-7-obj格式说明" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/24/stage3d-7-obj格式说明/" class="article-date">
+  <time datetime="2015-01-24T12:45:05.000Z" itemprop="datePublished">Jan 24 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stage3d_7_加载obj模型
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>OBJ文件是Alias|Wavefront公司为它的一套基于工作站的3D建模和动画软件”Advanced Visualizer”开发的一种标准3D模型文件格式，很适合用于3D软件模型之间的互导，也可以通过Maya读写。比如你在3dsMax或LightWave中建了一个模型，想把它调到Maya里面渲染或动画，导出OBJ文件就是一种很好的选择。目前几乎所有知名的3D软件都支持OBJ文件的读写，不过其中很多需要通过插件才能实现。OBJ文件是一种文本文件，可以直接用写字板打开进行查看和编辑修改。</p>
+<h1 id="OBJ文件的特点">OBJ文件的特点</h1>
+<p>OBJ3.0文件格式支持直线(Line)、多边形(Polygon)、表面(Surface)和自由形态曲线(Free-form Curve)。直线和多角形通过它们的点来描述，曲线和表面则根据它们的控制点和依附于曲线类型的额外信息来定义，这些信息支持规则和不规则的曲线，包括那些基于贝塞尔曲线(Bezier)、B样条(B-spline)、基数(Cardinal/Catmull-Rom)和泰勒方程(Taylor equations)的曲线。其他特点如下：</p>
+<ul>
+<li>OBJ文件是一种3D模型文件。不包含动画、材质特性、贴图路径、动力学、粒子等信息。</li>
+<li>OBJ文件主要支持多边形(Polygons)模型。虽然也支持曲线(Curves)、表面(Surfaces)、点组材质(Point Group Materials)，但Maya导出的OBJ文件并不包括这些信息。</li>
+<li>OBJ文件支持三个点以上的面，这一点很有用。很多其它的模型文件格式只支持三个点的面，所以导入Maya的模型经常被三角化了，这对于我们对模型进行再加工甚为不利。 </li>
+<li>OBJ文件支持法线和贴图坐标。在其它软件中调整好贴图后，贴图坐标信息可以存入OBJ文件中，这样文件导入Maya后只需指定一下贴图文件路径就行了，不需要再调整贴图坐标。</li>
+</ul>
+<h1 id="OBJ文件的基本结构">OBJ文件的基本结构</h1>
+<p>OBJ文件由一行行文本组成，注释行以符号“#”为开头，空格和空行可以随意加到文件中以增加文件的可读性。有字的行都由一两个标记字母也就是关键字(Keyword)开头，关键字可以说明这一行是什么样的数据。多行可以逻辑地连接在一起表示一行，方法是在每一行最后添加一个连接符()。 注意连接符()后面不能出现空格或Tab格，否则将导致文件出错。</p>
+<p>下列关键字可以在OBJ文件使用。在这个列表中, 关键字根据数据类型排列，每个关键字有一段简短描述。</p>
+<p>顶点数据(Vertex data)：<br>v 几何体顶点(Geometric vertices)<br>vt 贴图坐标点(Texture vertices)<br>vn 顶点法线(Vertex normals)<br>vp 参数空格顶点 (Parameter space vertices)</p>
+<p>自由形态曲线(Free-form curve)/表面属性(surface attributes):<br>deg 度(Degree)<br>bmat 基础矩阵(Basis matrix)<br>step 步尺寸(Step size)<br>cstype 曲线或表面类型 (Curve or surface type)</p>
+<p>元素(Elements):<br>p 点(Point)<br>l 线(Line)<br>f 面(Face)<br>curv 曲线(Curve)<br>curv2 2D曲线(2D curve)<br>surf 表面(Surface)</p>
+<p>自由形态曲线(Free-form curve)/表面主体陈述(surface body statements):<br>parm 参数值(Parameter values )<br>trim 外部修剪循环(Outer trimming loop)<br>hole 内部整修循环(Inner trimming loop)<br>scrv 特殊曲线(Special curve)<br>sp 特殊的点(Special point)<br>end 结束陈述(End statement)</p>
+<p>自由形态表面之间的连接(Connectivity between free-form surfaces):<br>con 连接 (Connect)</p>
+<p>成组(Grouping):<br>g 组名称(Group name)<br>s 光滑组(Smoothing group)<br>mg 合并组(Merging group)<br>o 对象名称(Object name)</p>
+<p>显示(Display)/渲染属性(render attributes):<br>bevel 导角插值(Bevel interpolation)<br>c_interp 颜色插值(Color interpolation)<br>d_interp 溶解插值(Dissolve interpolation)<br>lod 细节层次(Level of detail)<br>usemtl 材质名称(Material name)<br>mtllib 材质库(Material library)<br>shadow_obj 投射阴影(Shadow casting)<br>trace_obj 光线跟踪(Ray tracing)<br>ctech 曲线近似技术(Curve approximation technique)<br>stech 表面近似技术 (Surface approximation technique)</p>
+<h2 id="OBJ文件实例">OBJ文件实例</h2>
+<p>下面通过实例来具体讲解。让我们来创建一个OBJ文件，内容为一个四边形，不过这一回我们不用3D软件，而是用记事本来创建。打记事本，把下面的5行代码写入，可以适当加一点注释。保存文件为文本格式，文件名为”1.obj”。</p>
+<h3 id="创建一个正方体,定义顶点一个立方体有8个顶点，6个面，12个三角形">创建一个正方体,定义顶点一个立方体有8个顶点，6个面，12个三角形</h3>
+<p>v  -0.5000 0.0000 0.5000<br>v  -0.5000 0.0000 -0.5000<br>v  0.5000 0.0000 -0.5000<br>v  0.5000 0.0000 0.5000<br>v  -0.5000 1.0000 0.5000<br>v  0.5000 1.0000 0.5000<br>v  0.5000 1.0000 -0.5000<br>v  -0.5000 1.0000 -0.5000</p>
+<h3 id="定义顶点的法线">定义顶点的法线</h3>
+<p>vn 0.0000 -1.0000 -0.0000<br>vn 0.0000 1.0000 -0.0000<br>vn 0.0000 0.0000 1.0000<br>vn 1.0000 0.0000 -0.0000<br>vn 0.0000 0.0000 -1.0000<br>vn -1.0000 0.0000 -0.0000</p>
+<h3 id="定义UV坐标">定义UV坐标</h3>
+<p>vt 1.0000 0.0000 0.0000<br>vt 1.0000 1.0000 0.0000<br>vt 0.0000 1.0000 0.0000<br>vt 0.0000 0.0000 0.0000</p>
+<h3 id="定义face，face就是三角形。依次分别为_顶点索引/uv索引/法线索引,注意:索引是从1开始">定义face，face就是三角形。依次分别为 顶点索引/uv索引/法线索引,注意:索引是从1开始</h3>
+<p>f 1/1/1 2/2/1 3/3/1<br>f 3/3/1 4/4/1 1/1/1<br>f 5/4/2 6/1/2 7/2/2<br>f 7/2/2 8/3/2 5/4/2<br>f 1/4/3 4/1/3 6/2/3<br>f 6/2/3 5/3/3 1/4/3<br>f 4/4/4 3/1/4 7/2/4<br>f 7/2/4 6/3/4 4/4/4<br>f 3/4/5 2/1/5 8/2/5<br>f 8/2/5 7/3/5 3/4/5<br>f 2/4/6 1/1/6 5/2/6<br>f 5/2/6 8/3/6 2/4/6 </p>
+<p>注意：代码最后一定要按一下回车把光标切换到下一行，就是说加一个换行符(\n)。否则会看到如下错误信息：<br>// Error: line 1: OBJ file line 5: index out of range. //<br>// Error: line 1: Error reading file. //<br>然后在3dsmax里面导入这个obj，我们就会发现在原点有一个长宽高为1米的正方体</p>
+<h1 id="OBJ文件的缺点">OBJ文件的缺点</h1>
+<p>OBJ文件只能保存静态模型，带有动画的模型导出成obj之后，会丢失动画信息。其次OBJ文件是文本格式，体积非常大，程序在解析OBJ文件时速度非常慢。</p>
+<h1 id="在程序中解析obj文件">在程序中解析obj文件</h1>
+<p>在实际的游戏开发中不会使用obj这种格式，因为缺点太明显。但是obj格式是我们一定要掌握的格式。在本例中，我们针对obj格式编写一个解析类，专门用于obj格式的解析。注意：在本例中，该解析器对obj格式有着严格的要求：1、obj必须三角化，不能为四边形；2、obj必须含有UV、法线信息；3、导出obj只能为一个模型，不能将所有模型导出为一个obj文件；4、obj面数不能太多，不能超过21845面数。我们从3dsmax里面新建一个茶壶，然后导出为obj，我们将对这个obj文件进行解析。</p>
+<p>代码如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div></pre></td><td class="code"><pre><div class="line"><span class="package"><span class="keyword">package</span> {</span></div><div class="line">	</div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * OBJ模型简易解析器 </div><div class="line">	 * @author Neil</div><div class="line">	 * </div><div class="line">	 */	</div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjParser</span> </span>{</div><div class="line">		</div><div class="line">		<span class="comment">/** 顶点数据 */</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">var</span> vertices : Vector.&lt;Number&gt;;</div><div class="line">		<span class="comment">/** 法线数据 */</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">var</span> normals  : Vector.&lt;Number&gt;;</div><div class="line">		<span class="comment">/** uv数据 */</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">var</span> uvs		: Vector.&lt;Number&gt;; </div><div class="line">		<span class="comment">/** 索引数据 */</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">var</span> indices  : Vector.&lt;uint&gt;;</div><div class="line">		</div><div class="line">		<span class="comment">// obj文本数据</span></div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> data : String = <span class="string">""</span>;</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _vertIndices : Vector.&lt;uint&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _normIndices : Vector.&lt;uint&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _uvIndices	 : Vector.&lt;uint&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _vertices	 : Vector.&lt;Number&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _normals     : Vector.&lt;Number&gt;;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _uvs		 : Vector.&lt;Number&gt;;</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _charIndex : uint = <span class="number">0</span>;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _oldIndex  : uint = <span class="number">0</span>;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _strLength : uint = <span class="number">0</span>;</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">ObjParser</span><span class="params">()</span> </span>{</div><div class="line">			</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">parse</span><span class="params">(txt : String)</span> <span class="type">: void</span> </span>{</div><div class="line">			<span class="keyword">this</span>.data = txt;</div><div class="line">			<span class="keyword">this</span>.data = <span class="keyword">this</span>.data.replace(/\\[\r\n]+\s*/gm, <span class="string">' '</span>);</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>.vertices = <span class="keyword">new</span> Vector.&lt;Number&gt;();</div><div class="line">			<span class="keyword">this</span>.normals  = <span class="keyword">new</span> Vector.&lt;Number&gt;();</div><div class="line">			<span class="keyword">this</span>.uvs      = <span class="keyword">new</span> Vector.&lt;Number&gt;();</div><div class="line">			<span class="keyword">this</span>.indices  = <span class="keyword">new</span> Vector.&lt;uint&gt;();</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>._vertIndices = <span class="keyword">new</span> Vector.&lt;uint&gt;();</div><div class="line">			<span class="keyword">this</span>._normIndices = <span class="keyword">new</span> Vector.&lt;uint&gt;();</div><div class="line">			<span class="keyword">this</span>._uvIndices   = <span class="keyword">new</span> Vector.&lt;uint&gt;();</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>._vertices = <span class="keyword">new</span> Vector.&lt;Number&gt;();</div><div class="line">			<span class="keyword">this</span>._normals  = <span class="keyword">new</span> Vector.&lt;Number&gt;();</div><div class="line">			<span class="keyword">this</span>._uvs	   = <span class="keyword">new</span> Vector.&lt;Number&gt;();</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> creturn : String = String.fromCharCode(<span class="number">10</span>);</div><div class="line">			</div><div class="line">			<span class="keyword">if</span> (<span class="keyword">this</span>.data.indexOf(creturn) == -<span class="number">1</span>) {</div><div class="line">				creturn = String.fromCharCode(<span class="number">13</span>);</div><div class="line">			}</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>._strLength = <span class="keyword">this</span>.data.length;</div><div class="line">			<span class="keyword">this</span>._charIndex = <span class="keyword">this</span>.data.indexOf(creturn, <span class="number">0</span>);</div><div class="line">			<span class="keyword">this</span>._oldIndex	= <span class="number">0</span>;</div><div class="line">			</div><div class="line">			<span class="keyword">while</span> (<span class="keyword">this</span>._charIndex &lt; <span class="keyword">this</span>._strLength) {</div><div class="line">				<span class="keyword">this</span>._charIndex = <span class="keyword">this</span>.data.indexOf(creturn, <span class="keyword">this</span>._oldIndex);</div><div class="line">				<span class="keyword">if</span> (<span class="keyword">this</span>._charIndex == -<span class="number">1</span>) {</div><div class="line">					<span class="keyword">this</span>._charIndex = <span class="keyword">this</span>._strLength;</div><div class="line">				}</div><div class="line">				<span class="comment">// 获取obj的每一行内容</span></div><div class="line">				<span class="keyword">var</span> line : String = <span class="keyword">this</span>.data.substring(<span class="keyword">this</span>._oldIndex, <span class="keyword">this</span>._charIndex);</div><div class="line">				line = line.split(<span class="string">'\r'</span>).join(<span class="string">""</span>);</div><div class="line">				line = line.replace(<span class="string">"  "</span>, <span class="string">" "</span>);</div><div class="line">				<span class="comment">// 对每一行进行拆分</span></div><div class="line">				<span class="keyword">var</span> tokens : Array = line.split(<span class="string">" "</span>);</div><div class="line">				<span class="keyword">this</span>.parseLine(tokens);</div><div class="line">				<span class="keyword">this</span>._oldIndex = <span class="keyword">this</span>._charIndex + <span class="number">1</span>;</div><div class="line">			}</div><div class="line">			</div><div class="line">			<span class="comment">// 组装数据,因为在面信息中，顶点、UV、法线都有自己单独的索引。</span></div><div class="line">			<span class="comment">// 因此我们需要根据索引拼凑出一个完整三角形的所有数据</span></div><div class="line">			<span class="comment">// 这个时候三角形的索引数据就为1,2,3,4,5,6,7,8.....</span></div><div class="line">			<span class="keyword">var</span> length : int = <span class="keyword">this</span>._vertIndices.length;</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">var</span> i:int = <span class="number">0</span>; i &lt; length; i++) {</div><div class="line">				<span class="keyword">var</span> vIdx : int = <span class="keyword">this</span>._vertIndices[i] - <span class="number">1</span>;</div><div class="line">				<span class="keyword">this</span>.vertices.push(<span class="keyword">this</span>._vertices[vIdx * <span class="number">3</span>], <span class="keyword">this</span>._vertices[vIdx * <span class="number">3</span> + <span class="number">1</span>], <span class="keyword">this</span>._vertices[vIdx * <span class="number">3</span> + <span class="number">2</span>]);</div><div class="line">				<span class="keyword">var</span> nIdx : int = <span class="keyword">this</span>._normIndices[i] - <span class="number">1</span>;</div><div class="line">				<span class="keyword">this</span>.normals.push(<span class="keyword">this</span>._normals[nIdx * <span class="number">3</span>], <span class="keyword">this</span>._normals[nIdx * <span class="number">3</span> + <span class="number">1</span>], <span class="keyword">this</span>._normals[nIdx * <span class="number">3</span> + <span class="number">2</span>]);</div><div class="line">				<span class="keyword">var</span> uIdx : int = <span class="keyword">this</span>._uvIndices[i] - <span class="number">1</span>;</div><div class="line">				<span class="keyword">this</span>.uvs.push(<span class="keyword">this</span>._uvs[uIdx * <span class="number">2</span>], <span class="keyword">this</span>._uvs[uIdx * <span class="number">2</span> + <span class="number">1</span>]);</div><div class="line">				<span class="keyword">this</span>.indices.push(i);</div><div class="line">			}</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">parseLine</span><span class="params">(trunk:Array)</span><span class="type">:void</span> </span>{</div><div class="line">			<span class="keyword">switch</span> (trunk[<span class="number">0</span>]) {</div><div class="line">				<span class="keyword">case</span> <span class="string">"mtllib"</span>:</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="keyword">case</span> <span class="string">"g"</span>:</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="keyword">case</span> <span class="string">"o"</span>:</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="keyword">case</span> <span class="string">"usemtl"</span>:</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="comment">// 顶点坐标</span></div><div class="line">				<span class="keyword">case</span> <span class="string">"v"</span>:</div><div class="line">					parseVertex(trunk);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="comment">// uv坐标</span></div><div class="line">				<span class="keyword">case</span> <span class="string">"vt"</span>:</div><div class="line">					parseUV(trunk);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="comment">// 法线数据</span></div><div class="line">				<span class="keyword">case</span> <span class="string">"vn"</span>:</div><div class="line">					parseVertexNormal(trunk);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				<span class="comment">// 面信息</span></div><div class="line">				<span class="keyword">case</span> <span class="string">"f"</span>:</div><div class="line">					parseFace(trunk);</div><div class="line">			}</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">parseFace</span><span class="params">(trunk:Array)</span><span class="type">:void</span> </span>{</div><div class="line">			<span class="keyword">var</span> len:uint = trunk.length;</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">var</span> i:uint = <span class="number">1</span>; i &lt; len; ++i) {</div><div class="line">				<span class="keyword">if</span> (trunk[i] == <span class="string">""</span>)</div><div class="line">					<span class="keyword">continue</span>;</div><div class="line">				<span class="keyword">var</span> indices : Array = trunk[i].split(<span class="string">"/"</span>);</div><div class="line">				<span class="keyword">this</span>._vertIndices.push(parseInt(indices[<span class="number">0</span>]));</div><div class="line">				<span class="keyword">this</span>._uvIndices.push(parseInt(indices[<span class="number">1</span>]));</div><div class="line">				<span class="keyword">this</span>._normIndices.push(parseInt(indices[<span class="number">2</span>]));</div><div class="line">			}</div><div class="line">		}</div><div class="line">				</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">parseVertexNormal</span><span class="params">(trunk : Array)</span> <span class="type">: void</span> </span>{</div><div class="line">			<span class="keyword">this</span>._normals.push(parseFloat(trunk[<span class="number">1</span>]), parseFloat(trunk[<span class="number">2</span>]), -parseFloat(trunk[<span class="number">3</span>]));</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">parseUV</span><span class="params">(trunk : Array)</span> <span class="type">: void</span> </span>{</div><div class="line">			<span class="comment">// u, 1-v</span></div><div class="line">			<span class="keyword">this</span>._uvs.push(parseFloat(trunk[<span class="number">1</span>]), <span class="number">1</span> - parseFloat(trunk[<span class="number">2</span>]));</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">parseVertex</span><span class="params">(trunk : Array)</span> <span class="type">: void</span> </span>{</div><div class="line">			<span class="keyword">this</span>._vertices.push(parseFloat(trunk[<span class="number">1</span>]), parseFloat(trunk[<span class="number">2</span>]), -parseFloat(trunk[<span class="number">3</span>]));</div><div class="line">		}</div><div class="line">		</div><div class="line">		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<iframe src="http://boblchen.github.io/samples/stage3d_7_加载obj模型/bin-debug/Main.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/24/stage3d-7-obj格式说明/" data-id="zr3d13g3deu1wgdp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/01/23/stage3d-6-纹理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">stage3d_6_纹理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/3D/" style="font-size: NaNpx;">3D</a><a href="/tags/FLash3D/" style="font-size: NaNpx;">FLash3D</a><a href="/tags/Stage3D/" style="font-size: NaNpx;">Stage3D</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/01/24/stage3d-7-obj格式说明/">stage3d_7_加载obj模型</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/23/stage3d-6-纹理/">stage3d_6_纹理</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/20/stage3d-3-模型基础概念/">stage3d_3_初窥3d编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 小朋友<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>
