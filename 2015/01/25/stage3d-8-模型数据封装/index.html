@@ -5,18 +5,15 @@
   
   <title>stage3d_8_模型数据封装 | Hello World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="网格数据封装
-为了方便模型数据的管理，我们需要对模型数据进行封装，方便我们开发。目前为止，我们已知模型数据有两种:顶点位置、UV坐标。我们使用一个数组来保存这两种数据，其中数组的下标就为数据的类型。同时我们我们封装的这个模型数据还提供给我们VertexBuffer3D。将VertexBuffer3D的创建也交给这个工具来完成，因为只有它才拥有模型的数据。但是我们使用VertexBuffer3D的时">
+  <meta name="description" content="…">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stage3d_8_模型数据封装">
 <meta property="og:url" content="http://yoursite.com/2015/01/25/stage3d-8-模型数据封装/">
 <meta property="og:site_name" content="Hello World">
-<meta property="og:description" content="网格数据封装
-为了方便模型数据的管理，我们需要对模型数据进行封装，方便我们开发。目前为止，我们已知模型数据有两种:顶点位置、UV坐标。我们使用一个数组来保存这两种数据，其中数组的下标就为数据的类型。同时我们我们封装的这个模型数据还提供给我们VertexBuffer3D。将VertexBuffer3D的创建也交给这个工具来完成，因为只有它才拥有模型的数据。但是我们使用VertexBuffer3D的时">
+<meta property="og:description" content="…">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stage3d_8_模型数据封装">
-<meta name="twitter:description" content="网格数据封装
-为了方便模型数据的管理，我们需要对模型数据进行封装，方便我们开发。目前为止，我们已知模型数据有两种:顶点位置、UV坐标。我们使用一个数组来保存这两种数据，其中数组的下标就为数据的类型。同时我们我们封装的这个模型数据还提供给我们VertexBuffer3D。将VertexBuffer3D的创建也交给这个工具来完成，因为只有它才拥有模型的数据。但是我们使用VertexBuffer3D的时">
+<meta name="twitter:description" content="…">
 
   
     <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
@@ -90,7 +87,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="网格数据封装">网格数据封装</h1>
+        <p>…<br><a id="more"></a><br>…</p>
+<h1 id="网格数据封装">网格数据封装</h1>
 <p>为了方便模型数据的管理，我们需要对模型数据进行封装，方便我们开发。目前为止，我们已知模型数据有两种:顶点位置、UV坐标。我们使用一个数组来保存这两种数据，其中数组的下标就为数据的类型。同时我们我们封装的这个模型数据还提供给我们VertexBuffer3D。将VertexBuffer3D的创建也交给这个工具来完成，因为只有它才拥有模型的数据。但是我们使用VertexBuffer3D的时候，发现不仅需要VertexBuffer3D，还需要起始位置以及偏移量。例如:context3D.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);因此我们还需要在这个工具里面维护起始位置以及偏移量。为了方便数据的管理，我们不会对数据进行合并，例如：将顶点坐标和UV坐标合并到一起，这样VertexBuffer3D里面每一段数据的长度都为5个。因此起始位置为0，这样我们就去掉对起始位置的维护。代码如下:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> f3d.core.base {</div><div class="line">	</div><div class="line">	<span class="keyword">import</span> flash.display3D.VertexBuffer3D;</div><div class="line"></div><div class="line">	<span class="javadoc">/**</span></div><div class="line">	 * 网格数据 </div><div class="line">	 *<span class="javadoctag"> @author</span> Neil</div><div class="line">	 * </div><div class="line">	 */	</div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Surface3D</span> </span>{</div><div class="line">		</div><div class="line">		<span class="javadoc">/** 顶点 */</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> POSITION	: <span class="keyword">int</span> = <span class="number">0</span>;</div><div class="line">		<span class="javadoc">/** uv0,默认uv */</span></div><div class="line">		<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">const</span> UV0			: <span class="keyword">int</span> = <span class="number">1</span>;</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">const</span> LENGTH 	: <span class="keyword">int</span> = <span class="number">2</span>;</div><div class="line">		</div><div class="line">		<span class="javadoc">/** 数据格式 */</span></div><div class="line">		<span class="keyword">public</span> var formats 		 : Vector.&lt;String&gt;;</div><div class="line">		<span class="javadoc">/** 浮点型数据源 */</span></div><div class="line">		<span class="keyword">public</span> var sourceVector  : Vector.&lt;Vector.&lt;Number&gt;&gt;;</div><div class="line">		<span class="javadoc">/** buffers */</span></div><div class="line">		<span class="keyword">public</span> var vertexBuffers : Vector.&lt;VertexBuffer3D&gt;;</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> function <span class="title">Surface3D</span>() {</div><div class="line">			<span class="keyword">this</span>.formats = <span class="keyword">new</span> Vector.&lt;String&gt;(LENGTH, <span class="keyword">true</span>);</div><div class="line">			<span class="keyword">this</span>.sourceVector  = <span class="keyword">new</span> Vector.&lt;Vector.&lt;Number&gt;&gt;();</div><div class="line">			<span class="keyword">this</span>.vertexBuffers = <span class="keyword">new</span> Vector.&lt;VertexBuffer3D&gt;();</div><div class="line">			<span class="keyword">for</span> (var i:<span class="keyword">int</span> = <span class="number">0</span>; i &lt; LENGTH; i++) {</div><div class="line">				<span class="keyword">this</span>.formats[i] = <span class="keyword">null</span>;</div><div class="line">			}</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
 
@@ -122,6 +120,15 @@
     
 <nav id="article-nav">
   
+    <a href="/2015/01/26/stage3d-9-shader封装/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          stage3d_9_shader封装
+        
+      </div>
+    </a>
+  
   
     <a href="/2015/01/24/stage3d-7-obj格式说明/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
@@ -141,7 +148,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">9</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -150,7 +157,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">9</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -168,7 +175,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">9</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -178,6 +185,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/26/stage3d-9-shader封装/">stage3d_9_shader封装</a>
+          </li>
         
           <li>
             <a href="/2015/01/25/stage3d-8-模型数据封装/">stage3d_8_模型数据封装</a>
@@ -193,10 +204,6 @@
         
           <li>
             <a href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
           </li>
         
       </ul>

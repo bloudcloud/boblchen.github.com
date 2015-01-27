@@ -5,19 +5,16 @@
   
   <title>stage3d_5_变换投影 | Hello World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="投影
-之前在demo中，正方形的数据如下:meshData = Vector.([    //X,  Y,  Z,    -1, -1,  0,     // 左下角     1, -1,  0,     // 右下角     1,  1,  0,     // 右上角    -1,  1,  0,        // 左上角]);因为传递给GPU的数据已经是符合GPU NDC区间的值。但是在实际">
+  <meta name="description" content="…">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stage3d_5_变换投影">
 <meta property="og:url" content="http://yoursite.com/2015/01/22/stage3d-5-投影/">
 <meta property="og:site_name" content="Hello World">
-<meta property="og:description" content="投影
-之前在demo中，正方形的数据如下:meshData = Vector.([    //X,  Y,  Z,    -1, -1,  0,     // 左下角     1, -1,  0,     // 右下角     1,  1,  0,     // 右上角    -1,  1,  0,        // 左上角]);因为传递给GPU的数据已经是符合GPU NDC区间的值。但是在实际">
+<meta property="og:description" content="…">
 <meta property="og:image" content="/images/stage3d_5_变换投影/0.jpg">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stage3d_5_变换投影">
-<meta name="twitter:description" content="投影
-之前在demo中，正方形的数据如下:meshData = Vector.([    //X,  Y,  Z,    -1, -1,  0,     // 左下角     1, -1,  0,     // 右下角     1,  1,  0,     // 右上角    -1,  1,  0,        // 左上角]);因为传递给GPU的数据已经是符合GPU NDC区间的值。但是在实际">
+<meta name="twitter:description" content="…">
 
   
     <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
@@ -91,7 +88,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="投影">投影</h1>
+        <p>…<br><a id="more"></a><br>…</p>
+<h1 id="投影">投影</h1>
 <p>之前在demo中，正方形的数据如下:<br>meshData = Vector.<number>([<br>    //X,  Y,  Z,<br>    -1, -1,  0,     // 左下角<br>     1, -1,  0,     // 右下角<br>     1,  1,  0,     // 右上角<br>    -1,  1,  0,        // 左上角<br>]);<br>因为传递给GPU的数据已经是符合GPU NDC区间的值。但是在实际的开发中，模型的数据不可能是[-1, 1]区间的。这还只是模型的数据，如果还要做一些变换，例如左移10单位，缩放2倍，x轴旋转79°等等。那么势必会在cpu里面进行计算，然后在传递给GPU。但是模型的数据往往非常庞大，所以这个过程是非常不合理的。查阅AGAL的指令语法，可以发现AGAL支持矩阵的运算。我们将这个过程转移到GPU中去，交给GPU来计算，这样就减轻了CPU的负担。在<a href="http://boblchen.github.io/2015/01/19/stage3d-2-%E5%8F%98%E6%8D%A2/" target="_blank" rel="external">stage3d_2_变换</a>中提到模型空间、view空间、投影空间的概念。但是之前demo并没有使用到这个，现在在之前的demo基础上，增加模型空间、view空间、投影功能。使得我们可以模拟一个正常的3D环境。最终通过一些列的变换，坐标点数据就会被转换为符合GPU要求的数据。流程如下:<br>坐标点 -&gt; 转换到模型空间 -&gt; 转换到观察者空间 -&gt; 投影到NDC -&gt; 显示。<br>伪代码如下:<br>position <em> ModelMatrix </em> ViewMatrix * ProjectionMatrix</number></p>
 <h2 id="模型空间">模型空间</h2>
 <p>模型空间其实就代表了模型在世界坐标系中的状态，例如x轴缩放了2倍，y轴向上位移了10。那么一个坐标点乘以模型空间矩阵之后，这个坐标点就会在x轴上面缩放2倍，y轴向上位移了10单位。将所有模型的坐标点都乘以模型的空间，所有的坐标点都会进行这样一个变换。最终的效果就是，我们只需要简单的修改一下模型空间矩阵，就会达到模型在世界坐标系中的各种变换。</p>
@@ -168,7 +166,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">9</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -177,7 +175,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">9</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -195,7 +193,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">9</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -205,6 +203,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/26/stage3d-9-shader封装/">stage3d_9_shader封装</a>
+          </li>
         
           <li>
             <a href="/2015/01/25/stage3d-8-模型数据封装/">stage3d_8_模型数据封装</a>
@@ -220,10 +222,6 @@
         
           <li>
             <a href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
           </li>
         
       </ul>

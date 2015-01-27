@@ -6,15 +6,13 @@
   <title>stage3d_2_变换 | Hello World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="我们用几何方式描述3D场景中的物体。在游戏开发中我们会对物体进行变换，例如：平移、缩放、旋转。之前我们谈到向量、矩阵。以及特殊的向量矩阵和矩阵之前的数学运算。在游戏开发中，我们可以通过这种数学运算来描述物体的变换。
-基本变换
-当我们进行3D编程时，我们使用4x4矩阵来描述变换操作。为何会用到4x4矩阵?因为在3D中，一个点具有三个维度，例如A(x, y, z)。但是为何不用3x3矩阵而是用4x4矩">
+…">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stage3d_2_变换">
 <meta property="og:url" content="http://yoursite.com/2015/01/19/stage3d-2-变换/">
 <meta property="og:site_name" content="Hello World">
 <meta property="og:description" content="我们用几何方式描述3D场景中的物体。在游戏开发中我们会对物体进行变换，例如：平移、缩放、旋转。之前我们谈到向量、矩阵。以及特殊的向量矩阵和矩阵之前的数学运算。在游戏开发中，我们可以通过这种数学运算来描述物体的变换。
-基本变换
-当我们进行3D编程时，我们使用4x4矩阵来描述变换操作。为何会用到4x4矩阵?因为在3D中，一个点具有三个维度，例如A(x, y, z)。但是为何不用3x3矩阵而是用4x4矩">
+…">
 <meta property="og:image" content="/images/stage3d_2_变换/F98F3A36-CCED-4971-9712-F20B8C2DB1F8.png">
 <meta property="og:image" content="/images/stage3d_2_变换/6982A87D-E009-4F37-9CCA-C2B4A4D59A05.png">
 <meta property="og:image" content="/images/stage3d_2_变换/F5214C3E-5791-473C-BC8C-442EB7AD66A3.png">
@@ -30,8 +28,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stage3d_2_变换">
 <meta name="twitter:description" content="我们用几何方式描述3D场景中的物体。在游戏开发中我们会对物体进行变换，例如：平移、缩放、旋转。之前我们谈到向量、矩阵。以及特殊的向量矩阵和矩阵之前的数学运算。在游戏开发中，我们可以通过这种数学运算来描述物体的变换。
-基本变换
-当我们进行3D编程时，我们使用4x4矩阵来描述变换操作。为何会用到4x4矩阵?因为在3D中，一个点具有三个维度，例如A(x, y, z)。但是为何不用3x3矩阵而是用4x4矩">
+…">
 
   
     <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
@@ -106,6 +103,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>我们用几何方式描述3D场景中的物体。在游戏开发中我们会对物体进行变换，例如：平移、缩放、旋转。之前我们谈到向量、矩阵。以及特殊的向量矩阵和矩阵之前的数学运算。在游戏开发中，我们可以通过这种数学运算来描述物体的变换。</p>
+<p>…<br><a id="more"></a><br>…</p>
 <h2 id="基本变换">基本变换</h2>
 <p>当我们进行3D编程时，我们使用4x4矩阵来描述变换操作。为何会用到4x4矩阵?因为在3D中，一个点具有三个维度，例如A(x, y, z)。但是为何不用3x3矩阵而是用4x4矩阵。之前向量就谈到，向量只有方向和大小。例如向量A(x, y, z)。这里的向量A和之前的点都是使用同一种方式来描述。所以我们就无法区别(x, y, z)到底是向量还是点。因为向量只与大小方向有关，我们在变换时可能会错误的改变向量的方向以及大小，那么这个时候我们就要用一个标识来区分向量和点。因此我们就会增加一项变为(x, y, z, w)。又根据矩阵的定义，因此我们需要使用4x4矩阵。在其它情况下面，例如透视投影、反射等情况，3x3矩阵同样无法满足我们的需求。因此扩充为4x4。</p>
 <ul>
@@ -167,7 +165,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">9</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -176,7 +174,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">9</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -194,7 +192,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">9</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -204,6 +202,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/26/stage3d-9-shader封装/">stage3d_9_shader封装</a>
+          </li>
         
           <li>
             <a href="/2015/01/25/stage3d-8-模型数据封装/">stage3d_8_模型数据封装</a>
@@ -219,10 +221,6 @@
         
           <li>
             <a href="/2015/01/22/stage3d-5-投影/">stage3d_5_变换投影</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/21/stage3d-4-AGAL以及执行流程/">stage3d_4_AGAL以及执行流程</a>
           </li>
         
       </ul>
