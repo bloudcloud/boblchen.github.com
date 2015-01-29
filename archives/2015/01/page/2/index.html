@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>向量 | Hello World</title>
+  <title>Archives: 2015/1 | Hello World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在数学中，向量指具有大小和方向的几何对象，可以形象化地表示为带箭头的线段：箭头所指，代表向量的方向；线段长度，代表向量的大小。一个向量可以有多种记法，如记作粗体的字母（a、b、u、v），或在字母顶上加一小箭头→，或在字母下加波浪线~。如果给定向量的起点（A）和终点（B），可将向量记作AB（并于顶上加→）。…">
-<meta property="og:type" content="article">
-<meta property="og:title" content="向量">
-<meta property="og:url" content="http://yoursite.com/2015/01/18/stage3d-向量-0/">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hello World">
+<meta property="og:url" content="http://yoursite.com/archives/2015/01/page/2/">
 <meta property="og:site_name" content="Hello World">
-<meta property="og:description" content="在数学中，向量指具有大小和方向的几何对象，可以形象化地表示为带箭头的线段：箭头所指，代表向量的方向；线段长度，代表向量的大小。一个向量可以有多种记法，如记作粗体的字母（a、b、u、v），或在字母顶上加一小箭头→，或在字母下加波浪线~。如果给定向量的起点（A）和终点（B），可将向量记作AB（并于顶上加→）。…">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="向量">
-<meta name="twitter:description" content="在数学中，向量指具有大小和方向的几何对象，可以形象化地表示为带箭头的线段：箭头所指，代表向量的方向；线段长度，代表向量的大小。一个向量可以有多种记法，如记作粗体的字母（a、b、u、v），或在字母顶上加一小箭头→，或在字母下加波浪线~。如果给定向量的起点（A）和终点（B），可将向量记作AB（并于顶上加→）。…">
+<meta name="twitter:title" content="Hello World">
+<meta name="twitter:description">
 
   
     <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
@@ -61,7 +61,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-stage3d-向量-0" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-stage3d-向量-0" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/18/stage3d-向量-0/" class="article-date">
   <time datetime="2015-01-18T09:07:48.000Z" itemprop="datePublished">Jan 18 2015</time>
@@ -78,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      向量
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/18/stage3d-向量-0/">向量</a>
     </h1>
   
 
@@ -87,18 +89,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在数学中，向量指具有大小和方向的几何对象，可以形象化地表示为带箭头的线段：箭头所指，代表向量的方向；线段长度，代表向量的大小。一个向量可以有多种记法，如记作粗体的字母（a、b、u、v），或在字母顶上加一小箭头→，或在字母下加波浪线~。如果给定向量的起点（A）和终点（B），可将向量记作AB（并于顶上加→）。<br>…<br><a id="more"></a><br>…</p>
-<h2 id="几何表示">几何表示</h2>
-<p>向量可以用有向线段来表示。有向线段的长度表示向量的大小，向量的大小，也就是向量的长度。长度为0的向量叫做零向量.长度等于1个单位的向量，叫做单位向量。箭头所指的方向表示向量的方向。（若规定线段AB的端点A为起点，B为终点，则线段就具有了从起点A到终点B的方向和长度。</p>
-<h2 id="坐标表示">坐标表示</h2>
-<p>在平面直角坐标系中，设点A=(x1,y1)，点B=(x2,y2)。则向量AB=(x2-x1,y2-y1)。对于多维的空间向量，通过类推得到。向量的模<br>向量的大小，也就是向量的长度（称为模）。向量a的模记作|a|。向量的模是非负实数。设向量a=(x,y)，|a|=math.sqrt(x<em>x+y</em>y)。</p>
-<h2 id="单位向量">单位向量</h2>
-<p>模为1的向量，称之为单位向量。某些情况下面，我们为了计算方便，会将模不为1的向量转换为模为1的向量。例如：玩家角色从A点移动到B点。那么只需要计算出A到B的向量，将向量AB转换为模为1，让玩家从当前位置朝着方向AB移动”模 * speed”距离即可。计算方法：设向量AB=(x,y)。则模为1的向量=(x/|a|, y/|a|)。|a|表示向量的模。</p>
-<h2 id="向量点积">向量点积</h2>
-<p>设向量a=(x1,y1)，向量b=(x2,y2)。则a·b=x1<em>x2 + y1</em>y2。如果两个向量均未单位向量，那么两个向量的点积就得到两个向量的夹角的cos值。如果cos值越大，那么夹角就越小,cos值越小，夹角就越大。例如：a·b=1时，夹角为0，a·b=0时，夹角为90°。利用单位向量的点击可以用来模拟光照等效果。假设一个三维空间，X轴向右，Y轴向上，Z轴向前。一个平面平铺在xz轴上，用一个向量来表示该平面的方向：a=(0, 1, 0)。假设一个灯光方向为(0, -1, 0)。该灯光垂直照向于该平面。因为屏幕是朝上，但是灯光是照向平面，因此灯光的方向永远都是跟平面的方向相反，因此为了计算方便，我们将灯光方向取反-&gt;(0, 1, 0)。则a·b=1。夹角为0，说明灯光垂直照向平面，那么这个时候应该是平面受光最多，平面最亮。以256色为例，设平面颜色为rbg(0, 0, 0)黑色。灯光颜色(255, 0, 0)红色。那么我们可以使用最简单的加法法则：(0, 0, 0) + (255, 0, 0) * 1.0 = (255, 0, 0)。这个时候平面就会表现出红光。如果灯光方向为(1, 0, 0)。说明灯光方向与屏幕互相平行。平面是不会受到光照的。经过计算得出：a·b=0。最终屏幕rgb(0, 0, 0)仍然为黑色。</p>
-<h2 id="向量叉积">向量叉积</h2>
-<p>两个向量a和b的叉积axb的结果为c，c为一个新向量，c垂直于a和b。在3d中，向量叉积使用颇多。例如：前一节向量点积中，我们定义屏幕的方向为(0, 1, 0)。如果我们只知道平面其中的三个不重叠的点以及灯光方向，这个时候需要我们计算出平面受到的光照。设三个点分别为A,B,C。那么向量AB=B-A，向量AC=(C-A)。然后根据向量ABxAC即可计算出一条垂直于该平面的向量，那么这条向量就可以用于光照的计算。</p>
-
+        <p>在数学中，向量指具有大小和方向的几何对象，可以形象化地表示为带箭头的线段：箭头所指，代表向量的方向；线段长度，代表向量的大小。一个向量可以有多种记法，如记作粗体的字母（a、b、u、v），或在字母顶上加一小箭头→，或在字母下加波浪线~。如果给定向量的起点（A）和终点（B），可将向量记作AB（并于顶上加→）。<br>…<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/01/18/stage3d-向量-0/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -110,24 +106,15 @@
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2015/01/18/stage3d-矩阵-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          矩阵
-        
-      </div>
-    </a>
-  
-  
-</nav>
-
-  
 </article>
 
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/2015/01/">&laquo; Prev</a><a class="page-number" href="/archives/2015/01/">1</a><span class="page-number current">2</span>
+    </nav>
+  
 </section>
         
           <aside id="sidebar">

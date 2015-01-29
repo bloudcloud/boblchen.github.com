@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>stage3d_10_3d对象封装 | Hello World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stage3d_10_3d对象封装">
+<meta property="og:url" content="http://yoursite.com/2015/01/28/stage3d-10-3d对象封装/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="…">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stage3d_10_3d对象封装">
+<meta name="twitter:description" content="…">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hello World</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stage3d-10-3d对象封装" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/28/stage3d-10-3d对象封装/" class="article-date">
+  <time datetime="2015-01-28T12:33:15.000Z" itemprop="datePublished">Jan 28 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/3D/">3D</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stage3d_10_3d对象封装
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>…<br><a id="more"></a><br>…</p>
+<h1 id="3D对象">3D对象</h1>
+<p>在之前的demo中，我们封装了模型数据、shader，但是只是这两样，我们维护起来非常困难，在3D中，我们需要用一个结构来描述3D世界中的所有东西，我称之为Object3D。虽然我不会unity3d，但是我准备使用unity3d中的组件模式，即一切都是组件。因为在我现在引擎中，我发现很多不足以及坑爹的地方，使用起来某些地方仍然非常困难，我尝试换一种方式，希望有所改进。即使用组件方式，将所有的东西都转化为组件，但是组件的添加删除初始化，则需要我们自己手动完成，我们没有unity3d那么强大的工具，可以在工具中完成组件的增加删除。因此只能用最原始的方式—&gt;自己初始化。我现在随便封装了一下。。。代码在这里：</p>
+<p>最终代码: <a href="https://github.com/BobLChen/Stage3dSamples/tree/master/stage3d10" target="_blank" rel="external">完整代码</a> <a href="http://boblchen.github.io/samples/stage3d_10_3d对象封装/stage3d10.zip" target="_blank" rel="external">完整代码zip下载地址</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/28/stage3d-10-3d对象封装/" data-id="d3obu2eo7tnfz8xf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/01/26/stage3d-9-shader封装/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">stage3d_9_shader封装</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/3D/" style="font-size: NaNpx;">3D</a><a href="/tags/FLash3D/" style="font-size: NaNpx;">FLash3D</a><a href="/tags/Stage3D/" style="font-size: NaNpx;">Stage3D</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/01/28/stage3d-10-3d对象封装/">stage3d_10_3d对象封装</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/26/stage3d-9-shader封装/">stage3d_9_shader封装</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/25/stage3d-8-模型数据封装/">stage3d_8_模型数据封装</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/24/stage3d-7-obj格式说明/">stage3d_7_加载obj模型</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/23/stage3d-6-纹理/">stage3d_6_纹理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 小朋友 QQ:470259651<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>
