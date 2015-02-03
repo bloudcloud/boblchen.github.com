@@ -3,16 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>stage3d_10_3d对象封装 | Hello World</title>
+  <title>stage3d_12_深度 | Hello World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stage3d_10_3d对象封装">
-<meta property="og:url" content="http://yoursite.com/2015/01/28/stage3d-10-3d对象封装/">
+<meta property="og:title" content="stage3d_12_深度">
+<meta property="og:url" content="http://yoursite.com/2015/02/03/stage3d-12-深度/">
 <meta property="og:site_name" content="Hello World">
 <meta property="og:description" content="…">
+<meta property="og:image" content="/images/stage3d_12_深度/360B7441-9322-4C1B-8A82-BDB5150DA388.png">
+<meta property="og:image" content="/images/stage3d_12_深度/354CEF9B-0CBD-4B5D-901C-CCDBD4D96276.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stage3d_10_3d对象封装">
+<meta name="twitter:title" content="stage3d_12_深度">
 <meta name="twitter:description" content="…">
 
   
@@ -61,10 +63,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-stage3d-10-3d对象封装" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-stage3d-12-深度" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/01/28/stage3d-10-3d对象封装/" class="article-date">
-  <time datetime="2015-01-28T12:33:15.000Z" itemprop="datePublished">Jan 28 2015</time>
+    <a href="/2015/02/03/stage3d-12-深度/" class="article-date">
+  <time datetime="2015-02-03T13:53:13.000Z" itemprop="datePublished">Feb 3 2015</time>
 </a>
     
   <div class="article-category">
@@ -79,7 +81,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      stage3d_10_3d对象封装
+      stage3d_12_深度
     </h1>
   
 
@@ -88,14 +90,31 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>…<br><a id="more"></a><br>…</p>
-<h1 id="3D对象">3D对象</h1>
-<p>在之前的demo中，我们封装了模型数据、shader，但是只是这两样，我们维护起来非常困难，在3D中，我们需要用一个结构来描述3D世界中的所有东西，我称之为Object3D。虽然我不会unity3d，但是我准备使用unity3d中的组件模式，即一切都是组件。因为在我现在引擎中，我发现很多不足以及坑爹的地方，使用起来某些地方仍然非常困难，我尝试换一种方式，希望有所改进。即使用组件方式，将所有的东西都转化为组件，但是组件的添加删除初始化，则需要我们自己手动完成，我们没有unity3d那么强大的工具，可以在工具中完成组件的增加删除。因此只能用最原始的方式—&gt;自己初始化。我现在随便封装了一下。。。代码在这里：</p>
-<p>最终代码: <a href="https://github.com/BobLChen/Stage3dSamples/tree/master/stage3d10" target="_blank" rel="external">完整代码</a> <a href="http://boblchen.github.io/samples/stage3d_10_3d对象封装/stage3d10.zip" target="_blank" rel="external">完整代码zip下载地址</a></p>
+<h1 id="深度缓冲区">深度缓冲区</h1>
+<p>深度缓冲区是一个”不包含图像数据”的纹理对象。常见得深度值范围为[0.0, 1.0]，其中0.0表示离观察者最近，1.0表示离观察者最远。深度缓冲区中的每一个元素都与后台缓冲区的每个像素一一对应。例如之前的demo，如果我们在之前的demo中设置后台缓冲区大小为:800x600-&gt;configureBackBuffer(800, 600, 0, true)。那么就有800x600这么大的一个深度缓冲区，和800x600后台缓冲区一一对应。即每一个像素点都具有一个深度值。但是深度有什么用处？我们在绘制模型的时候，必然会存在这样的一个关系。球A，圆锥B，圆环C，圆柱D如下图：</p>
+<img src="/images/stage3d_12_深度/360B7441-9322-4C1B-8A82-BDB5150DA388.png" class="[class names]">
+
+<p>为了判断物体哪些被挡住，我们必然要知道该物体的每一个像素的深度，通过深度的比较，计算出物体哪些像素被挡住。因为有了深度的存在，因此我们在绘制物体时，我们不必关心物体的绘制顺序。</p>
+<h3 id="深度值">深度值</h3>
+<p>在之前推荐到大家详细看一下投影的推导过程，在投影过程中，我们会计算深度值，实际上，深度值是由我们提供给GPU的。</p>
+<h3 id="深度缓存的工作方式">深度缓存的工作方式</h3>
+<p>为了说明深度缓存的工作方式，我们先来看一个栗子：</p>
+<img src="/images/stage3d_12_深度/354CEF9B-0CBD-4B5D-901C-CCDBD4D96276.png" class="[class names]">
+
+<p>假设我们的绘制顺序为：圆柱体-&gt;球体-&gt;圆锥体，深度比较的条件为”&lt;=”。然后我们来模拟一下深度的工作方式：</p>
+<ol>
+<li>清空深度缓冲区的数据，重置所有像素点对应的深度为1.0。</li>
+<li>绘制圆柱体,P3深度为d3，d3 &lt;= 1.0，深度测试通过，设置当前深度值为d3。</li>
+<li>绘制球体， P1深度为d1，d1 &lt;= d3， 深度测试通过，设置当前深度值为d1</li>
+<li>绘制圆锥体,P2深度为d2，d2 &gt;  d1， 深度测试未通过，不改变当前深度值<br>当这个过程执行完毕之后，我们就会看到P1点，而看不到P2、P3点。我们将这个过程应用到所有的点上面去，最终结果就是我们想要的结果。</li>
+</ol>
+<h3 id="深度测试条件">深度测试条件</h3>
+<p>我们可以开启深度测试，也可以关闭深度测试，同时我们也可以更改深度测试的条件，在之前的例子中我们使用的是”&lt;=”，我们还可以使用其它条件例如：”&gt;=”、”&gt;”、”&lt;”、”always”等等条件，这些具体的条件可以查询Context3DCompareMode得到。注意：如果我们关闭深度测试，那么我们当前渲染的模型是不会写入深度到深度缓存中去，但是深度测试依然有效。大家一定要切记，绘制顺序对深度测试的影响。常规状态下是没有任何影响，如果我们更改了深度测试条件，在某些情况下可能不会达到我们期望的效果。例如：我们想要一个模型永远显示，我们在渲染这个模型时更改深度测试条件为”always”，但是我们最先绘制这个模型，然后才绘制其它模型。在这个时候，就不会达到我们期望的效果。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/28/stage3d-10-3d对象封装/" data-id="d3obu2eo7tnfz8xf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/03/stage3d-12-深度/" data-id="9ao9agjvhxbw906s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
@@ -106,19 +125,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/02/02/stage3d-11-混合模式/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          stage3d_11_混合模式
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/01/26/stage3d-9-shader封装/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/02/02/stage3d-11-混合模式/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">stage3d_9_shader封装</div>
+      <div class="article-nav-title">stage3d_11_混合模式</div>
     </a>
   
 </nav>
