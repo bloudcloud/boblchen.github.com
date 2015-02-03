@@ -107,7 +107,7 @@
 <p>其中source color为源像素；destination color为目标像素；sourceFactor为混合系数；destinationFactor为目标混合系数。混合系数可以在Context3DBlendFactor中查询得到。</p>
 <h3 id="原色混合">原色混合</h3>
 <p>默认的混合就是原色混合sourceFactor:ONE;destinationFactor:ZERO。如下:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="literal">result</span> color = (source color * <span class="number">0</span>) + (destination color * <span class="number">1</span>)</div><div class="line"><span class="literal">result</span> color = destination color</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="literal">result</span> color = (source color * <span class="number">1</span>) + (destination color * <span class="number">0</span>)</div><div class="line"><span class="literal">result</span> color = source color</div></pre></td></tr></table></figure>
 
 <h3 id="叠加混合">叠加混合</h3>
 <p>叠加即将目标色和原色相加,这样就好变得非常亮:sourceFactor:ONE;destinationFactor:ONE。如下:</p>
