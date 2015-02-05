@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>stage3d_12_深度 | Hello World</title>
+  <title>stage3d_13_法线以及光照 | Hello World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stage3d_12_深度">
-<meta property="og:url" content="http://yoursite.com/2015/02/03/stage3d-12-深度/">
+<meta property="og:title" content="stage3d_13_法线以及光照">
+<meta property="og:url" content="http://yoursite.com/2015/02/05/stage3d-13-法线/">
 <meta property="og:site_name" content="Hello World">
 <meta property="og:description" content="…">
-<meta property="og:image" content="/images/stage3d_12_深度/360B7441-9322-4C1B-8A82-BDB5150DA388.png">
-<meta property="og:image" content="/images/stage3d_12_深度/354CEF9B-0CBD-4B5D-901C-CCDBD4D96276.png">
+<meta property="og:image" content="/images/stage3d_13_法线/1206F074-6D22-40CE-938D-FA93B69B5ED4.png">
+<meta property="og:image" content="/images/stage3d_13_法线/6A1223E1-D2C6-4D37-B376-989F316C12F0.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stage3d_12_深度">
+<meta name="twitter:title" content="stage3d_13_法线以及光照">
 <meta name="twitter:description" content="…">
 
   
@@ -63,16 +63,12 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-stage3d-12-深度" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-stage3d-13-法线" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/02/03/stage3d-12-深度/" class="article-date">
-  <time datetime="2015-02-03T13:53:13.000Z" itemprop="datePublished">Feb 3 2015</time>
+    <a href="/2015/02/05/stage3d-13-法线/" class="article-date">
+  <time datetime="2015-02-05T13:54:15.000Z" itemprop="datePublished">Feb 5 2015</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/3D/">3D</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
@@ -81,7 +77,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      stage3d_12_深度
+      stage3d_13_法线以及光照
     </h1>
   
 
@@ -90,54 +86,32 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>…<br><a id="more"></a><br>…</p>
-<h1 id="深度缓冲区">深度缓冲区</h1>
-<p>深度缓冲区是一个”不包含图像数据”的纹理对象。常见得深度值范围为[0.0, 1.0]，其中0.0表示离观察者最近，1.0表示离观察者最远。深度缓冲区中的每一个元素都与后台缓冲区的每个像素一一对应。例如之前的demo，如果我们在之前的demo中设置后台缓冲区大小为:800x600-&gt;configureBackBuffer(800, 600, 0, true)。那么就有800x600这么大的一个深度缓冲区，和800x600后台缓冲区一一对应。即每一个像素点都具有一个深度值。但是深度有什么用处？我们在绘制模型的时候，必然会存在这样的一个关系。球A，圆锥B，圆环C，圆柱D如下图：</p>
-<img src="/images/stage3d_12_深度/360B7441-9322-4C1B-8A82-BDB5150DA388.png" class="[class names]">
+<h1 id="法线向量">法线向量</h1>
+<p>平面法线是用来描述多边形朝向的单位向量。在3D游戏中，就是用来描述三角面的朝向，在之前向量中就提到过，可以通过向量的点积来模拟光照。既然我们知道了面的法线方向，那么我们很容易就计算出面的光照，从而模拟整个模型的受光强弱。法线向量是与面相互垂直的。例如:</p>
+<img src="/images/stage3d_13_法线/1206F074-6D22-40CE-938D-FA93B69B5ED4.png" class="[class names]">
 
-<p>为了判断物体哪些被挡住，我们必然要知道该物体的每一个像素的深度，通过深度的比较，计算出物体哪些像素被挡住。因为有了深度的存在，因此我们在绘制物体时，我们不必关心物体的绘制顺序。</p>
-<h3 id="深度值">深度值</h3>
-<p>在之前推荐到大家详细看一下投影的推导过程，在投影过程中，我们会计算深度值，实际上，深度值是由我们提供给GPU的。</p>
-<h3 id="深度缓存的工作方式">深度缓存的工作方式</h3>
-<p>为了说明深度缓存的工作方式，我们先来看一个栗子：</p>
-<img src="/images/stage3d_12_深度/354CEF9B-0CBD-4B5D-901C-CCDBD4D96276.png" class="[class names]">
-
-<p>假设我们的绘制顺序为：圆柱体-&gt;球体-&gt;圆锥体，深度比较的条件为”&lt;=”。然后我们来模拟一下深度的工作方式：</p>
-<ol>
-<li>清空深度缓冲区的数据，重置所有像素点对应的深度为1.0。</li>
-<li>绘制圆柱体,P3深度为d3，d3 &lt;= 1.0，深度测试通过，设置当前深度值为d3。</li>
-<li>绘制球体， P1深度为d1，d1 &lt;= d3， 深度测试通过，设置当前深度值为d1</li>
-<li>绘制圆锥体,P2深度为d2，d2 &gt;  d1， 深度测试未通过，不改变当前深度值<br>当这个过程执行完毕之后，我们就会看到P1点，而看不到P2、P3点。我们将这个过程应用到所有的点上面去，最终结果就是我们想要的结果。</li>
-</ol>
-<h3 id="深度测试条件">深度测试条件</h3>
-<p>我们可以开启深度测试，也可以关闭深度测试，同时我们也可以更改深度测试的条件，在之前的例子中我们使用的是”&lt;=”，我们还可以使用其它条件例如：”&gt;=”、”&gt;”、”&lt;”、”always”等等条件，这些具体的条件可以查询Context3DCompareMode得到。注意：如果我们关闭深度测试，那么我们当前渲染的模型是不会写入深度到深度缓存中去，但是深度测试依然有效。大家一定要切记，绘制顺序对深度测试的影响。常规状态下是没有任何影响，如果我们更改了深度测试条件，在某些情况下可能不会达到我们期望的效果。例如：我们想要一个模型永远显示，我们在渲染这个模型时更改深度测试条件为”always”，但是我们最先绘制这个模型，然后才绘制其它模型。在这个时候，就不会达到我们期望的效果。</p>
+<h2 id="计算法线向量">计算法线向量</h2>
+<p>已知一个三角形ABC，求解三角形ABC的法线。根据向量的定义，我们可以找出向量AB和AC。又根据向量的叉积定义，两个向量的叉积的结果向量垂直于这两个向量。那么法线N=AB x AC。并且对法线N规范化，使得N的模为1。</p>
+<h2 id="兰伯特余弦定理">兰伯特余弦定理</h2>
+<p>垂直照相平面的光线比侧面照向平面的光线更加强烈。例如:</p>
+<img src="/images/stage3d_13_法线/6A1223E1-D2C6-4D37-B376-989F316C12F0.png" class="[class names]"><br>如图，假设我们有一块很小的区域da。当法线向量N和光线向量L平行时，DA受光最多。随着N和L之间的夹角逐渐增大，区域DA受到的光线会越来越少。因此我们可以推导出一个函数光线强度y=f(x)，随着夹角𝜃(x)增加，y就越来越小。随着夹角𝜃减少，y就越来越大。我们发现余弦刚好满足我们的需求。但是当N和L夹角&gt;90°时，光照是照向背面的，这个时候我们应该设置强度为0。因此最终的函数如下:<br>f(𝜃) = max(cos𝜃, 0) = max(L∙N, 0)。其中L和N都是单位向量。<br><br>## 漫反射光<br><br>在初中物理中，我们就学过，之所以能够看到各种物体，就是因为物体的表面坑坑洼洼，发生了漫反射，反射出来的光线被眼球吸收。为了在计算机中模拟这种情况，我们约定光会在各种方向上均匀散开。我们将漫反射分为两个部分，一个漫反射光颜色，一个漫反射材质颜色。因此物体会吸收掉光，因此我们使用乘法来实现。例如：表面反射50%红光，100%绿光，75%蓝光，入射光为白光。那么漫反射光颜色为:(1.0, 1.0, 1.0)，漫反射材质颜色为:(0.5, 1.0, 0.75)。反射光总量为：<br>(1.0, 1.0, 1.0) x (0.5, 1.0, 0.75) = (0.5, 1.0, 0.75)<br>我们定义光颜色为C，材质颜色为M，光线向量为L，法线向量为:N。则发射回来的光的颜色为:<br>C<em>M</em>max(L∙N, 0)<br><br>## 引擎架子已经搭好 链接:<a href="http://boblchen.github.io/samples/stage3d_13_%E6%B3%95%E7%BA%BF/stage3d13.zip" target="_blank" rel="external">完整代码</a>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/03/stage3d-12-深度/" data-id="9ao9agjvhxbw906s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/05/stage3d-13-法线/" data-id="1q8joor4j1rwzcvh" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/3D/">3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FLash3D/">FLash3D</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stage3D/">Stage3D</a></li></ul>
-
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2015/02/05/stage3d-13-法线/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          stage3d_13_法线以及光照
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/02/02/stage3d-11-混合模式/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/02/03/stage3d-12-深度/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">stage3d_11_混合模式</div>
+      <div class="article-nav-title">stage3d_12_深度</div>
     </a>
   
 </nav>
