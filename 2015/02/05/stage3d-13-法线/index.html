@@ -13,6 +13,11 @@
 <meta property="og:description" content="…">
 <meta property="og:image" content="/images/stage3d_13_法线/1206F074-6D22-40CE-938D-FA93B69B5ED4.png">
 <meta property="og:image" content="/images/stage3d_13_法线/6A1223E1-D2C6-4D37-B376-989F316C12F0.png">
+<meta property="og:image" content="/images/stage3d_13_法线/04396941-6702-4DEB-9481-2D8E761BAE90.png">
+<meta property="og:image" content="/images/stage3d_13_法线/A8110016-7200-44F5-BB98-3E9C0521838A.png">
+<meta property="og:image" content="/images/stage3d_13_法线/951DCED4-ACEF-4A7B-AE8E-ACB6947CEAAB.png">
+<meta property="og:image" content="/images/stage3d_13_法线/73753C7E-E273-4B63-8564-F730CDA92C44.png">
+<meta property="og:image" content="/images/stage3d_13_法线/C523EA0A-DFD2-45D7-B9D6-6A76C9082236.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stage3d_13_法线以及光照">
 <meta name="twitter:description" content="…">
@@ -94,7 +99,15 @@
 <p>已知一个三角形ABC，求解三角形ABC的法线。根据向量的定义，我们可以找出向量AB和AC。又根据向量的叉积定义，两个向量的叉积的结果向量垂直于这两个向量。那么法线N=AB x AC。并且对法线N规范化，使得N的模为1。</p>
 <h2 id="兰伯特余弦定理">兰伯特余弦定理</h2>
 <p>垂直照相平面的光线比侧面照向平面的光线更加强烈。例如:</p>
-<img src="/images/stage3d_13_法线/6A1223E1-D2C6-4D37-B376-989F316C12F0.png" class="[class names]"><br>如图，假设我们有一块很小的区域da。当法线向量N和光线向量L平行时，DA受光最多。随着N和L之间的夹角逐渐增大，区域DA受到的光线会越来越少。因此我们可以推导出一个函数光线强度y=f(x)，随着夹角𝜃(x)增加，y就越来越小。随着夹角𝜃减少，y就越来越大。我们发现余弦刚好满足我们的需求。但是当N和L夹角&gt;90°时，光照是照向背面的，这个时候我们应该设置强度为0。因此最终的函数如下:<br>f(𝜃) = max(cos𝜃, 0) = max(L∙N, 0)。其中L和N都是单位向量。<br><br>## 漫反射光<br><br>在初中物理中，我们就学过，之所以能够看到各种物体，就是因为物体的表面坑坑洼洼，发生了漫反射，反射出来的光线被眼球吸收。为了在计算机中模拟这种情况，我们约定光会在各种方向上均匀散开。我们将漫反射分为两个部分，一个漫反射光颜色，一个漫反射材质颜色。因此物体会吸收掉光，因此我们使用乘法来实现。例如：表面反射50%红光，100%绿光，75%蓝光，入射光为白光。那么漫反射光颜色为:(1.0, 1.0, 1.0)，漫反射材质颜色为:(0.5, 1.0, 0.75)。反射光总量为：<br>(1.0, 1.0, 1.0) x (0.5, 1.0, 0.75) = (0.5, 1.0, 0.75)<br>我们定义光颜色为C，材质颜色为M，光线向量为L，法线向量为:N。则发射回来的光的颜色为:<br>C<em>M</em>max(L∙N, 0)<br><br>## 引擎架子已经搭好 链接:<a href="http://boblchen.github.io/samples/stage3d_13_%E6%B3%95%E7%BA%BF/stage3d13.zip" target="_blank" rel="external">完整代码</a>
+<img src="/images/stage3d_13_法线/6A1223E1-D2C6-4D37-B376-989F316C12F0.png" class="[class names]"><br>如图，假设我们有一块很小的区域da。当法线向量N和光线向量L平行时，DA受光最多。随着N和L之间的夹角逐渐增大，区域DA受到的光线会越来越少。因此我们可以推导出一个函数光线强度y=f(x)，随着夹角𝜃(x)增加，y就越来越小。随着夹角𝜃减少，y就越来越大。我们发现余弦刚好满足我们的需求。但是当N和L夹角&gt;90°时，光照是照向背面的，这个时候我们应该设置强度为0。因此最终的函数如下:<br>f(𝜃) = max(cos𝜃, 0) = max(L∙N, 0)。其中L和N都是单位向量。<br><br>## 漫反射光<br><br>在初中物理中，我们就学过，之所以能够看到各种物体，就是因为物体的表面坑坑洼洼，发生了漫反射，反射出来的光线被眼球吸收。为了在计算机中模拟这种情况，我们约定光会在各种方向上均匀散开。我们将漫反射分为两个部分，一个漫反射光颜色，一个漫反射材质颜色。因此物体会吸收掉光，因此我们使用乘法来实现。例如：表面反射50%红光，100%绿光，75%蓝光，入射光为白光。那么漫反射光颜色为:(1.0, 1.0, 1.0)，漫反射材质颜色为:(0.5, 1.0, 0.75)。反射光总量为：<br>(1.0, 1.0, 1.0) x (0.5, 1.0, 0.75) = (0.5, 1.0, 0.75)<br>我们定义光颜色为C，材质颜色为M，光线向量为L，法线向量为:N。则发射回来的光的颜色为:<br>C<em>M</em>max(L∙N, 0)<br><br>## 环境光<br><br>前面我们处理了满反射光，但是我们没有处理环境光，环境光其实就是其它物体反弹的间接光。但是我们在现实生活中看到的很多光线都是间接光。比如我们看到的茶壶背面并不是全黑的，这其实就是因为有一些其它的光线间接的反弹到了茶壶的背面。为了模拟间接光，我们在光照方程中引入了一个新的公式。<br>Ca*Ma<br>Ca指定了所有间接的环境光总量，Ma指定了材质反射率。Ma可以与漫反射方程中的材质反射率一样，也可以不一样。我们将漫反射和环境光合到一起得到新的光照方程：<br>𝐿𝑖𝑡𝐶𝑜𝑙𝑜𝑟 = Ca⨂Ma + Kd⋅Cd⨂Md<br>其中-&gt;Ca：环境光；Ma：材质反射率；Kd：max(L⋅N, 0)；Cd：灯光；Md：材质反射率。(在常规做法中Ma=Md)<br><br>## 高光<br><br>当灯光照射到光滑表面时，我们在某些角度下面会看到锐利的反射。我们称这种反射为高光反射(镜面反射)。与漫反射不同，高光只有在特定角度下面才会看到。也就是说高光与观察点的位置相关。当观察点变化时，我们看到的高光数量也会跟着变化。高光计算方式如下图:<br><img src="/images/stage3d_13_法线/04396941-6702-4DEB-9481-2D8E761BAE90.png" class="[class names]"><br>如上图，高光不会在所有的方向上面散开，它只会集中在圆锥区域内。E为观察点，因此当V在圆锥体内时，我们可以看到高光，V与R的夹角越小，我们看到的高光就越强。高光反射的圆锥体区域是由反射量R和一个角度𝜑定义的。又因为当𝜑=0时强度最高，𝜑区域最大Max𝜑时，强度逐渐将为0。对于这里的𝜑max，我们使用乘方间接控制。最后高光方程为：<br><img src="/images/stage3d_13_法线/A8110016-7200-44F5-BB98-3E9C0521838A.png" class="[class names]"><br>其中，Cs指定了高光颜色，Ms指定了镜面颜色反射率。系数Ks则由𝜑角度和P决定。其中cos𝜑=V⋅R<br><br>因此最终的光照方程为:<br><img src="/images/stage3d_13_法线/951DCED4-ACEF-4A7B-AE8E-ACB6947CEAAB.png" class="[class names]"><br>反射向量R = I - 2(N·I)·N<br><img src="/images/stage3d_13_法线/73753C7E-E273-4B63-8564-F730CDA92C44.png" class="[class names]">
+
+<h1 id="Phong光照模型">Phong光照模型</h1>
+<p>Phong光照模型的效果更为逼真。但是计算量更大，其实在着色器中，我们将光照方程从顶点着色器改到片段着色器即可。因为顶点着色器只是处理当前顶点，计算量固定已知，但是顶点与顶点之间有很大的距离，因此会照成不平滑。计算出来的光照也就不平滑，可以明显的看到成块状。但是在顶点中计算的优势就是计算量小。之前提到片段着色器的计算次数是顶点着色器的很多倍。并且片段着色有一个插值过程，我们使用插值的值进行计算光照，就可以得到一个平滑的值。如图：</p>
+<img src="/images/stage3d_13_法线/C523EA0A-DFD2-45D7-B9D6-6A76C9082236.png" class="[class names]">
+
+<h1 id="Blinn–Phong光照模型">Blinn–Phong光照模型</h1>
+<p>Blinn–Phong光照模型其实就是对Phong光照模型进行一个小小的改进。主要是在高光上面进行算法的改进。Phong光照模型在计算高光时，我们需要计算R⋅V。其中R和V计算量比较大，因此我们使用半角来替换R⋅V。<a href="http://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model" target="_blank" rel="external">详细算法</a></p>
+<h2 id="引擎架子已经搭好_链接:8">引擎架子已经搭好 链接:<a href="http://boblchen.github.io/samples/stage3d_13_%E6%B3%95%E7%BA%BF/stage3d13.zip" target="_blank" rel="external">完整代码</a></h2>
 
       
     </div>
