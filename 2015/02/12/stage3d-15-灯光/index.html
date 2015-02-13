@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>stage3d_15_平行光 | Hello World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stage3d_15_平行光">
+<meta property="og:url" content="http://yoursite.com/2015/02/12/stage3d-15-灯光/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="…">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stage3d_15_平行光">
+<meta name="twitter:description" content="…">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hello World</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stage3d-15-灯光" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/12/stage3d-15-灯光/" class="article-date">
+  <time datetime="2015-02-12T12:37:15.000Z" itemprop="datePublished">Feb 12 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stage3d_15_平行光
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>…<br><a id="more"></a><br>…</p>
+<h1 id="平行光">平行光</h1>
+<p>平行光用于模拟距离很远的光，它产生的入射光是相互平行的。平行光由一个描述光线传播方向的向量表示。因为平行光产生的光线是平行的，因此所有光都使用相同的方向向量。在现实生活中，最常见的平行光就是太阳光。</p>
+<h1 id="点光">点光</h1>
+<p>在现实生活中最常见的点光就是灯泡。它可以向各个方向发射光线。对于模型的任意一点，都有一条从光源射向该店的光线。那么对于点光，我们需要计算光线方向。</p>
+<h2 id="衰减">衰减</h2>
+<p>按物理规律来说,光照强度会随着距离的增加而衰减,它与距离的平方成反比。</p>
+<h2 id="范围">范围</h2>
+<p>当一个点距离点光过远时，我们使它不再接收该点光的照射。</p>
+<h1 id="聚光灯">聚光灯</h1>
+<p>在现实生活中用得最多的就是手电。它由一个位置，一个方向以及一个圆锥体光照区域描述。</p>
+<h1 id="AGAL实现">AGAL实现</h1>
+<p>沿用之前的Filter结构。我们定义个灯光的基类。LightFilter。里面包含灯光的颜色和环境光。代码如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> f3d.core.shader.filters {</div><div class="line"></div><div class="line">	<span class="javadoc">/**</span></div><div class="line">	 * 灯光filter</div><div class="line">	 *<span class="javadoctag"> @author</span> neil</div><div class="line">	 *</div><div class="line">	 */</div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LightFilter</span> <span class="keyword">extends</span> <span class="title">Filter3D</span> </span>{</div><div class="line"></div><div class="line">		<span class="keyword">protected</span> var _ambient 		: uint;					<span class="comment">// 环境光</span></div><div class="line">		<span class="keyword">protected</span> var _ambientData 	: Vector.&lt;Number&gt;;		<span class="comment">// </span></div><div class="line">		<span class="keyword">protected</span> var _lightColor 	: uint;					<span class="comment">// 灯光颜色</span></div><div class="line">		<span class="keyword">protected</span> var _lightData 	: Vector.&lt;Number&gt;;</div><div class="line">		</div><div class="line">		<span class="javadoc">/**</span></div><div class="line">		 * light</div><div class="line">		 *<span class="javadoctag"> @param</span> light</div><div class="line">		 *</div><div class="line">		 */</div><div class="line">		<span class="keyword">public</span> function <span class="title">LightFilter</span>() {</div><div class="line">			<span class="keyword">super</span>(<span class="string">"LightFilter"</span>);</div><div class="line">			<span class="keyword">this</span>._lightData 	= Vector.&lt;Number&gt;([<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]);</div><div class="line">			<span class="keyword">this</span>._ambientData 	= Vector.&lt;Number&gt;([<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">1</span>]);</div><div class="line">			<span class="keyword">this</span>.ambient 		= <span class="number">0xc8c8c8</span>;</div><div class="line">			<span class="keyword">this</span>.lightColor 	= <span class="number">0xffffff</span>;</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> function get <span class="title">lightColor</span>() : uint {</div><div class="line">			<span class="keyword">return</span> _lightColor;</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="javadoc">/**</span></div><div class="line">		 * 灯光颜色 </div><div class="line">		 *<span class="javadoctag"> @param</span> value</div><div class="line">		 * </div><div class="line">		 */		</div><div class="line">		<span class="keyword">public</span> function set <span class="title">lightColor</span>(value : uint) : <span class="keyword">void</span> {</div><div class="line">			<span class="keyword">this</span>._lightColor = value;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">0</span>] = (<span class="keyword">int</span>(value &gt;&gt; <span class="number">16</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">1</span>] = (<span class="keyword">int</span>(value &gt;&gt; <span class="number">8</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">2</span>] = (<span class="keyword">int</span>(value &gt;&gt; <span class="number">0</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">		}</div><div class="line"></div><div class="line">		<span class="keyword">public</span> function get <span class="title">ambient</span>() : uint {</div><div class="line">			<span class="keyword">return</span> _ambient;</div><div class="line">		}</div><div class="line"></div><div class="line">		<span class="javadoc">/**</span></div><div class="line">		 * 环境光</div><div class="line">		 *<span class="javadoctag"> @param</span> value</div><div class="line">		 *</div><div class="line">		 */</div><div class="line">		<span class="keyword">public</span> function set <span class="title">ambient</span>(value : uint) : <span class="keyword">void</span> {</div><div class="line">			<span class="keyword">this</span>._ambient = value;</div><div class="line">			<span class="keyword">this</span>._ambientData[<span class="number">0</span>] = (<span class="keyword">int</span>(value &gt;&gt; <span class="number">16</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">			<span class="keyword">this</span>._ambientData[<span class="number">1</span>] = (<span class="keyword">int</span>(value &gt;&gt; <span class="number">8</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">			<span class="keyword">this</span>._ambientData[<span class="number">2</span>] = (<span class="keyword">int</span>(value &gt;&gt; <span class="number">0</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">			<span class="keyword">this</span>._ambientData[<span class="number">3</span>] = <span class="number">1</span>;</div><div class="line">		}</div><div class="line"></div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="观察者位置">观察者位置</h3>
+<p>在之前谈到，计算高光的时候，需要观察者的方向。但是对于模型的每一个顶点来说，它和观察之间的方向都是不同的。为了得到观察者对于顶点的方向，我们要么计算出观察者对于每一个顶点的方向，然后保存到属性寄存器中，然后上传到显卡。要么我们在gpu里面实时计算。我们采用第二种，因为在gpu里面计算，减轻了cpu的压力。根据向量的定义，观察者-&gt;顶点的向量=观察者-顶点</p>
+<h2 id="平行光shader">平行光shader</h2>
+<p>为了方便调试，我们先暂时将所有的数据写入到Filter中，以后在修改代码，提供接口方便外部调用。我们定义DirectionalLightFilter继承自LightFilter。添加如下属性:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _dirData		: Vector.&lt;Number&gt;;		<span class="comment">// 方向数据</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _eyeData		: Vector.&lt;Number&gt;;		<span class="comment">// 观察者位置</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _specular 		: <span class="keyword">uint</span>;					<span class="comment">// 高光</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _specularData	: Vector.&lt;Number&gt;;		<span class="comment">// 高光数据</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">var</span> _power 			: Number = <span class="number">50</span>;			<span class="comment">// 高光强度</span></div></pre></td></tr></table></figure>
+
+<p>然后我们分别提供这些属性的赋值接口：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 高光强度</div><div class="line"> * @param value</div><div class="line"> *</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span> <span class="title">power</span><span class="params">(value : Number)</span> <span class="type">: void</span> </span>{</div><div class="line">	<span class="keyword">this</span>._power = value;</div><div class="line">	<span class="keyword">this</span>._specularData[<span class="number">3</span>] = value;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span> <span class="title">power</span><span class="params">()</span> <span class="type">: Number</span> </span>{</div><div class="line">	<span class="keyword">return</span> _power;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span> <span class="title">specular</span><span class="params">()</span> <span class="type">: uint</span> </span>{</div><div class="line">	<span class="keyword">return</span> _specular;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 高光颜色</div><div class="line"> * @param value</div><div class="line"> * </div><div class="line"> */		</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span> <span class="title">specular</span><span class="params">(value : uint)</span> <span class="type">: void</span> </span>{</div><div class="line">	<span class="keyword">this</span>._specular = value;</div><div class="line">	<span class="keyword">this</span>._specularData[<span class="number">0</span>] = (int(value &gt;&gt; <span class="number">16</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">	<span class="keyword">this</span>._specularData[<span class="number">1</span>] = (int(value &gt;&gt; <span class="number">8</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">	<span class="keyword">this</span>._specularData[<span class="number">2</span>] = (int(value &gt;&gt; <span class="number">0</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span> <span class="title">eyeData</span><span class="params">(pos : Vector3D)</span><span class="type">:void</span> </span>{</div><div class="line">	<span class="keyword">this</span>._eyeData[<span class="number">0</span>] = pos.x;</div><div class="line">	<span class="keyword">this</span>._eyeData[<span class="number">1</span>] = pos.y;</div><div class="line">	<span class="keyword">this</span>._eyeData[<span class="number">2</span>] = pos.z;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span> <span class="title">dirData</span><span class="params">(dir : Vector3D)</span><span class="type">:void</span> </span>{</div><div class="line">	dir.normalize();</div><div class="line">	<span class="keyword">this</span>._dirData[<span class="number">0</span>] = -dir.x;</div><div class="line">	<span class="keyword">this</span>._dirData[<span class="number">1</span>] = -dir.y;</div><div class="line">	<span class="keyword">this</span>._dirData[<span class="number">2</span>] = -dir.z;</div><div class="line">	<span class="keyword">this</span>._dirData[<span class="number">3</span>] = <span class="number">0</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>最后我们在构造器中初始化</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public <span class="function"><span class="keyword">function</span> <span class="title">DirectionalLightFilter</span><span class="params">()</span> </span>{</div><div class="line">	<span class="keyword">this</span>._specularData 	= Vector.&lt;<span class="built_in">Number</span>&gt;([<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]);		</div><div class="line">	<span class="keyword">this</span>._eyeData 		= Vector.&lt;<span class="built_in">Number</span>&gt;([<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]);</div><div class="line">	<span class="keyword">this</span>._dirData 		= Vector.&lt;<span class="built_in">Number</span>&gt;([<span class="number">0</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>]);</div><div class="line">	<span class="keyword">this</span>.specular 		= <span class="number">0x000000</span>;							<span class="comment">// 设置高光颜色</span></div><div class="line">	<span class="keyword">this</span>.dirData 		= <span class="keyword">new</span> Vector3D(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);			<span class="comment">// 灯光的方向，(0, 0, 1)为灯光方向向量</span></div><div class="line">	<span class="keyword">this</span>.lightColor 	= <span class="number">0xFF0000</span>;							<span class="comment">// 灯光颜色为纯红</span></div><div class="line">	<span class="keyword">this</span>.ambient 		= <span class="number">0x555555</span>;							<span class="comment">// 环境光为灰色</span></div><div class="line">	<span class="keyword">this</span>.specular 		= <span class="number">0xFFFFFF</span>;							<span class="comment">// 高光为纯白色</span></div><div class="line">	<span class="keyword">this</span>.power 			= <span class="number">50</span>;								<span class="comment">// 高光强度为50</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>最后我们重写getFragmentCode方法，在shader中实现光照。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getFragmentCode</span><span class="params">(regCache : ShaderRegisterCache, agal : Boolean)</span><span class="type">:String</span> </span>{</div><div class="line">			</div><div class="line">	<span class="keyword">var</span> eyeFc    : ShaderRegisterElement = regCache.getFc();</div><div class="line">	regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(eyeFc, _eyeData));</div><div class="line">	<span class="keyword">var</span> specuFc  : ShaderRegisterElement = regCache.getFc();</div><div class="line">	regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(specuFc, _specularData));</div><div class="line">	<span class="keyword">var</span> lightDir : ShaderRegisterElement = regCache.getFc();</div><div class="line">	regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(lightDir, _dirData));</div><div class="line">	<span class="keyword">var</span> colorFc  : ShaderRegisterElement = regCache.getFc();</div><div class="line">	regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(colorFc, _lightData));</div><div class="line">	<span class="keyword">var</span> ambFc    : ShaderRegisterElement = regCache.getFc();</div><div class="line">	regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(ambFc, _ambientData));</div><div class="line">	</div><div class="line">	<span class="keyword">var</span> ft0 : ShaderRegisterElement = regCache.getFt();</div><div class="line">	<span class="keyword">var</span> ft1 : ShaderRegisterElement = regCache.getFt();	</div><div class="line">	<span class="keyword">var</span> ft2 : ShaderRegisterElement = regCache.getFt();</div><div class="line">	</div><div class="line">	<span class="keyword">var</span> code : String = <span class="string">''</span>;</div><div class="line">	<span class="keyword">if</span> (agal) {</div><div class="line">		<span class="comment">// 赋值为纯白色</span></div><div class="line">		code += <span class="string">'mov '</span> + regCache.oc + <span class="string">'.xyz, '</span> + regCache.fc0123 + <span class="string">'.yyy \n'</span>;</div><div class="line">		<span class="comment">// 法线ft0</span></div><div class="line">		code += <span class="string">'mov '</span> + ft0 + <span class="string">'.xyz, '</span> + regCache.getV(Surface3D.NORMAL) + <span class="string">'.xyz \n'</span>;</div><div class="line">		<span class="comment">// 法线ft1</span></div><div class="line">		code += <span class="string">'sub '</span> + ft1 + <span class="string">'.xyz, '</span> + eyeFc + <span class="string">'.xyz, '</span> + regCache.getV(Surface3D.POSITION) + <span class="string">" \n"</span>;</div><div class="line">		code += <span class="string">'nrm '</span> + ft1 + <span class="string">'.xyz, '</span> + ft1 + <span class="string">'.xyz \n'</span>;</div><div class="line">		<span class="comment">// 高光</span></div><div class="line">		code += <span class="string">'add '</span> + ft2 + <span class="string">'.xyz, '</span> + lightDir + <span class="string">'.xyz, '</span> + ft1 + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'nrm '</span> + ft2 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'dp3 '</span> + ft2 + <span class="string">'.w, '</span> + ft0 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'max '</span> + ft2 + <span class="string">'.w, '</span> + ft2 + <span class="string">'.w, '</span> + regCache.fc0123 + <span class="string">'.x \n'</span>;</div><div class="line">		code += <span class="string">'pow '</span> + ft2 + <span class="string">'.w, '</span> + ft2 + <span class="string">'.w, '</span> + specuFc + <span class="string">'.w \n'</span>;</div><div class="line">		<span class="comment">// 灯光</span></div><div class="line">		code += <span class="string">'dp3 '</span> + ft0 + <span class="string">'.w, '</span> + ft0 + <span class="string">'.xyz, '</span> + lightDir + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'max '</span> + ft0 + <span class="string">'.w, '</span> + ft0 + <span class="string">'.w, '</span> + regCache.fc0123 + <span class="string">'.x \n'</span>;</div><div class="line">		code += <span class="string">'mul '</span> + ft0 + <span class="string">'.xyz, '</span> + colorFc + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.w \n'</span>;</div><div class="line">		<span class="comment">// 灯光颜色+环境色</span></div><div class="line">		code += <span class="string">'add '</span> + ft0 + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz, '</span> + ambFc + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'mul '</span> + ft0 + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz, '</span> + regCache.oc + <span class="string">'.xyz \n'</span>;</div><div class="line">		<span class="comment">// 最终结果</span></div><div class="line">		code += <span class="string">'mul '</span> + ft2 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.w, '</span> + specuFc + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'add '</span> + ft0 + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.xyz \n'</span>;</div><div class="line">		code += <span class="string">'mov '</span> + regCache.oc + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz \n'</span>;</div><div class="line">	}</div><div class="line">		</div><div class="line">	regCache.removeFt(ft0);</div><div class="line">	regCache.removeFt(ft1);</div><div class="line">	regCache.removeFt(ft2);</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> code;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h1 id="AGAL代码说明">AGAL代码说明</h1>
+<p>在对光照模型shader进行说明之前，有一个地方需要详细说明一下。在AGAl中，寄存器中的组件有一点需要特别注意。<br>如果寄存器为”目标寄存”。那么我们访问其组件，跟”顺序无关”，(vt0/ft0).xyzw中，xyzw顺序可以随便写-&gt;xyzw或yzxw或xwzy或wzyx。最终的结果都是存放到x,y,z,w中。<br>如果寄存器为”源寄存器”。那么我们进行”运算”时，跟”顺序有关”。并且不足四位时，自动以最后一位补齐。如下:<br>mul vt2.yxzw, vt0.xy, vt1.zyx<br>这一段代码，咋一看大家可能以为运算方式如下:(错误的方式)<br>vt2.y = vt0.x<em>vt1.z;<br>vt2.x = vt0.y</em>vt1.y;<br>vt2.z = vt0.y<em>vt1.x;<br>vt2.w = vt0.y</em>vt1.x;<br>其实这种方式是错误的。因为vt2为目标寄存器，xyzw组件直接绑定到xyzw，无论我们顺序怎么写。vt0.xy会自动补齐为vt0.xyyy。vt1.zyx会自动补齐为vt1.zyxx。那么真正的结果如下:<br>vt2.x = vt0.x <em> vt1.z<br>vt2.y = vt0.y </em> vt1.y<br>vt2.z = vt0.y <em> vt1.x<br>vt2.w = vt0.y </em> vt1.x</p>
+<p>代码详细说明:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 为了调试方便，我们出颜色赋值一个纯色：oc.xyz = (1, 1, 1)</span></div><div class="line">code += <span class="string">'mov '</span> + regCache.oc + <span class="string">'.xyz, '</span> + regCache.fc0123 + <span class="string">'.yyy \n'</span>;</div><div class="line"><span class="comment">// 获取从顶点程序传入到片段程序的法线数据，赋值给ft0临时寄存器</span></div><div class="line">code += <span class="string">'mov '</span> + ft0 + <span class="string">'.xyz, '</span> + regCache.getV(Surface3D.NORMAL) + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 计算观察者的方向向量=观察者-顶点位置。(注意观察上上一篇中的示意图，观察者的方向)</span></div><div class="line">code += <span class="string">'sub '</span> + ft1 + <span class="string">'.xyz, '</span> + eyeFc + <span class="string">'.xyz, '</span> + regCache.getV(Surface3D.POSITION) + <span class="string">" \n"</span>;</div><div class="line"><span class="comment">// 规范化方向向量，使得模为1。</span></div><div class="line">code += <span class="string">'nrm '</span> + ft1 + <span class="string">'.xyz, '</span> + ft1 + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// ----------计算高光----------</span></div><div class="line"><span class="comment">// 计算反射光线向量(详情参考向量的运算)</span></div><div class="line">code += <span class="string">'add '</span> + ft2 + <span class="string">'.xyz, '</span> + lightDir + <span class="string">'.xyz, '</span> + ft1 + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 规范化</span></div><div class="line">code += <span class="string">'nrm '</span> + ft2 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 兰伯特余玄定理，点乘获取光照强度</span></div><div class="line">code += <span class="string">'dp3 '</span> + ft2 + <span class="string">'.w, '</span> + ft0 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 光照强度最小为0</span></div><div class="line">code += <span class="string">'max '</span> + ft2 + <span class="string">'.w, '</span> + ft2 + <span class="string">'.w, '</span> + regCache.fc0123 + <span class="string">'.x \n'</span>;</div><div class="line"><span class="comment">// 乘方，模拟锥形区域</span></div><div class="line">code += <span class="string">'pow '</span> + ft2 + <span class="string">'.w, '</span> + ft2 + <span class="string">'.w, '</span> + specuFc + <span class="string">'.w \n'</span>;</div><div class="line"><span class="comment">// ----------灯光----------</span></div><div class="line"><span class="comment">// 计算灯光强度</span></div><div class="line">code += <span class="string">'dp3 '</span> + ft0 + <span class="string">'.w, '</span> + ft0 + <span class="string">'.xyz, '</span> + lightDir + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 光照强度最小为0</span></div><div class="line">code += <span class="string">'max '</span> + ft0 + <span class="string">'.w, '</span> + ft0 + <span class="string">'.w, '</span> + regCache.fc0123 + <span class="string">'.x \n'</span>;</div><div class="line"><span class="comment">// 入射光线</span></div><div class="line">code += <span class="string">'mul '</span> + ft0 + <span class="string">'.xyz, '</span> + colorFc + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.w \n'</span>;</div><div class="line"><span class="comment">// 入射光线 * 材质色 + 环境色</span></div><div class="line">code += <span class="string">'add '</span> + ft0 + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz, '</span> + ambFc + <span class="string">'.xyz \n'</span>;</div><div class="line">code += <span class="string">'mul '</span> + ft0 + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz, '</span> + regCache.oc + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 最终结果 = 入射光线 * 材质色 + 环境色 + 高光</span></div><div class="line"><span class="comment">// 高光强度乘以高光颜色</span></div><div class="line">code += <span class="string">'mul '</span> + ft2 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.w, '</span> + specuFc + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 高光 + 入射光线 * 材质色 + 环境色</span></div><div class="line">code += <span class="string">'add '</span> + ft0 + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz, '</span> + ft2 + <span class="string">'.xyz \n'</span>;</div><div class="line"><span class="comment">// 赋值给oc输出</span></div><div class="line">code += <span class="string">'mov '</span> + regCache.oc + <span class="string">'.xyz, '</span> + ft0 + <span class="string">'.xyz \n'</span>;</div></pre></td></tr></table></figure>
+
+<p>结果如下:</p>
+<a href="https://github.com/BobLChen/Stage3dSamples/tree/master/stage15" target="_blank" rel="external">完整代码</a>
+
+<iframe src="http://boblchen.github.io/samples/stage3d_15_平行光/Main.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+
+<h1 id="点光实现，自己琢磨吧…">点光实现，自己琢磨吧…</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="package"><span class="keyword">package</span> <span class="title">f3d</span>.<span class="title">core</span>.<span class="title">shader</span>.<span class="title">filters</span> {</span></div><div class="line"></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.geom.Vector3D;</span></div><div class="line">	</div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> f3d.core.base.Surface3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> f3d.core.shader.utils.FcRegisterLabel;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> f3d.core.shader.utils.ShaderRegisterCache;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> f3d.core.shader.utils.ShaderRegisterElement;</span></div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PointLightFilter</span> <span class="keyword">extends</span> <span class="title">LightFilter</span> </span>{</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">var</span> temp : Vector3D = <span class="keyword">new</span> Vector3D();</div><div class="line"></div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> _pointData 	: Vector.&lt;Number&gt;;</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">PointLightFilter</span><span class="params">()</span> </span>{</div><div class="line">			<span class="keyword">this</span>._pointData = Vector.&lt;Number&gt;([<span class="number">0</span>, <span class="number">100</span>, <span class="number">0</span>, <span class="number">10000</span>]);</div><div class="line">			<span class="keyword">this</span>.ambient 	= <span class="number">0x555555</span>;</div><div class="line">			<span class="keyword">this</span>.lightColor = <span class="number">0xFF0000</span>;</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 设置灯光颜色 </div><div class="line">		 * @param value</div><div class="line">		 */		</div><div class="line">		<span class="keyword">override</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span> <span class="title">lightColor</span><span class="params">(value : uint)</span> <span class="type">: void</span> </span>{</div><div class="line">			<span class="comment">// 3 为强度</span></div><div class="line">			<span class="keyword">this</span>._lightColor = value;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">0</span>] = (int(value &gt;&gt; <span class="number">16</span>) & <span class="number">0xFF</span>) / <span class="number">0xFF</span> * <span class="number">3</span>;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">1</span>] = (int(value &gt;&gt; <span class="number">8</span>) & <span class="number">0xFF</span>)  / <span class="number">0xFF</span> * <span class="number">3</span>;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">2</span>] = (int(value &gt;&gt; <span class="number">0</span>) & <span class="number">0xFF</span>)  / <span class="number">0xFF</span> * <span class="number">3</span>;</div><div class="line">			<span class="keyword">this</span>._lightData[<span class="number">3</span>] = <span class="number">0</span>;</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">override</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getFragmentCode</span><span class="params">(regCache : ShaderRegisterCache, agal : Boolean)</span> <span class="type">: String</span> </span>{</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> ft1 : ShaderRegisterElement = regCache.getFt();</div><div class="line">			<span class="keyword">var</span> ft2 : ShaderRegisterElement = regCache.getFt();</div><div class="line">			<span class="keyword">var</span> ft3 : ShaderRegisterElement = regCache.getFt();</div><div class="line">			<span class="keyword">var</span> ft4 : ShaderRegisterElement = regCache.getFt();</div><div class="line"></div><div class="line">			<span class="keyword">var</span> posFc : ShaderRegisterElement = regCache.getFc();</div><div class="line">			regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(posFc, _pointData));</div><div class="line">			<span class="keyword">var</span> difFc : ShaderRegisterElement = regCache.getFc();</div><div class="line">			regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(difFc, _lightData));</div><div class="line">			<span class="keyword">var</span> ambFc : ShaderRegisterElement = regCache.getFc();</div><div class="line">			regCache.fcUsed.push(<span class="keyword">new</span> FcRegisterLabel(ambFc, _ambientData));</div><div class="line"></div><div class="line">			<span class="keyword">var</span> code : String = <span class="string">""</span>;</div><div class="line">			</div><div class="line">			code += <span class="string">"mov "</span> + regCache.oc + <span class="string">".xyz, "</span> + regCache.fc0123 + <span class="string">".yyy \n"</span>;</div><div class="line">			code += <span class="string">"mov "</span> + ft1 + <span class="string">", "</span> + regCache.fc0123 + <span class="string">".xxxx \n"</span>;</div><div class="line">			code += <span class="string">"nrm "</span> + ft1 + <span class="string">".xyz, "</span> + regCache.getV(Surface3D.NORMAL) + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"mov "</span> + ft1 + <span class="string">".w, "</span> + regCache.fc0123 + <span class="string">".x \n"</span>;</div><div class="line">			code += <span class="string">"mov "</span> + ft2 + <span class="string">".xyzw, "</span> + regCache.fc0123 + <span class="string">".xxxx \n"</span>;</div><div class="line">			code += <span class="string">"sub "</span> + ft2 + <span class="string">", "</span> + posFc + <span class="string">", "</span> + regCache.getV(Surface3D.POSITION) + <span class="string">".xyzx \n"</span>;</div><div class="line">			code += <span class="string">"dp3 "</span> + ft1 + <span class="string">".w, "</span> + ft2 + <span class="string">", "</span> + ft2 + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"div "</span> + ft4 + <span class="string">", "</span> + ft1 + <span class="string">".w, "</span> + posFc + <span class="string">".w \n"</span>;</div><div class="line">			code += <span class="string">"sub "</span> + ft1 + <span class="string">".w, "</span> + regCache.fc0123 + <span class="string">".y, "</span> + ft4 + <span class="string">".x \n"</span>;</div><div class="line">			code += <span class="string">"max "</span> + ft4 + <span class="string">".x, "</span> + ft1 + <span class="string">".w, "</span> + difFc + <span class="string">".w \n"</span>;</div><div class="line">			code += <span class="string">"nrm "</span> + ft2 + <span class="string">".xyz, "</span> + ft2 + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"dp3 "</span> + ft1 + <span class="string">".w, "</span> + ft1 + <span class="string">", "</span> + ft2 + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"mul "</span> + ft2 + <span class="string">", "</span> + difFc + <span class="string">", "</span> + ft4 + <span class="string">".xxxx \n"</span>;</div><div class="line">			code += <span class="string">"max "</span> + ft1 + <span class="string">".x, "</span> + ft1 + <span class="string">".w, "</span> + regCache.fc0123 + <span class="string">".x \n"</span>;</div><div class="line">			code += <span class="string">"mul "</span> + ft4 + <span class="string">", "</span> + ft1 + <span class="string">".xxxx, "</span> + ft2 + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"mov "</span> + ft3 + <span class="string">", "</span> + ft4 + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"add "</span> + ft3 + <span class="string">", "</span> + ft3 + <span class="string">", "</span> + ambFc + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"mul "</span> + ft3 + <span class="string">", "</span> + ft3 + <span class="string">", "</span> + regCache.oc + <span class="string">" \n"</span>;</div><div class="line">			code += <span class="string">"mov "</span> + ft3 + <span class="string">".w, "</span> + regCache.oc + <span class="string">".w \n"</span>;</div><div class="line">			code += <span class="string">"sat "</span> + regCache.oc + <span class="string">", "</span> + ft3 + <span class="string">" \n"</span>;</div><div class="line"></div><div class="line">			regCache.removeFt(ft1);</div><div class="line">			regCache.removeFt(ft2);</div><div class="line">			regCache.removeFt(ft3);</div><div class="line">			regCache.removeFt(ft4);</div><div class="line"></div><div class="line">			<span class="keyword">return</span> code;</div><div class="line">		}</div><div class="line"></div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<a href="https://github.com/BobLChen/Stage3dSamples/tree/master/stage15" target="_blank" rel="external">完整代码</a>
+
+<iframe src="http://boblchen.github.io/samples/stage3d_15_平行光/Main1.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/02/12/stage3d-15-灯光/" data-id="qhmbmtvax9dwxlmt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/02/09/stage3d-14-深度混合代码/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">stage3d_14_裁减以及shader代码</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/3D/" style="font-size: NaNpx;">3D</a><a href="/tags/FLash3D/" style="font-size: NaNpx;">FLash3D</a><a href="/tags/Stage3D/" style="font-size: NaNpx;">Stage3D</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/02/12/stage3d-15-灯光/">stage3d_15_平行光</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/09/stage3d-14-深度混合代码/">stage3d_14_裁减以及shader代码</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/05/stage3d-13-法线/">stage3d_13_法线以及光照</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/03/stage3d-12-深度/">stage3d_12_深度</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/02/stage3d-11-混合模式/">stage3d_11_混合模式</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 小朋友 QQ:470259651<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>
