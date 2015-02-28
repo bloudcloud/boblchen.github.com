@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>stage3d_16_骨骼动画 | Hello World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stage3d_16_骨骼动画">
+<meta property="og:url" content="http://yoursite.com/2015/02/28/stage3d-16-骨骼动画/">
+<meta property="og:site_name" content="Hello World">
+<meta property="og:description" content="…">
+<meta property="og:image" content="/images/stage3d_16_骨骼/814D57C2-3024-47AD-90A0-71F29A7F3918.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stage3d_16_骨骼动画">
+<meta name="twitter:description" content="…">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Hello World" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hello World</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stage3d-16-骨骼动画" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/28/stage3d-16-骨骼动画/" class="article-date">
+  <time datetime="2015-02-28T02:14:19.000Z" itemprop="datePublished">Feb 28 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stage3d_16_骨骼动画
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>…<br><a id="more"></a><br>…</p>
+<h1 id="骨骼动画">骨骼动画</h1>
+<p>在之前的demo中，我们使用的是一个茶壶。但是这个茶壶是不能产生形变的。虽然这个茶壶可以缩放旋转位移，但是它自己本身并不能运动，比如茶壶的盖子打开等等操作。但是在游戏开发中，这种不能满足我们的需求，我们需要人物、怪物等等动有自己的动作。常见得制作方式有两种：</p>
+<ul>
+<li>将每一帧的动画都导出，然后在游戏中逐帧播放</li>
+<li>使用骨骼系统，让骨骼控制模型的运动<br>由于逐帧动画跟之前的没有区别，因此不在讲解。这里主要讲解骨骼动画。</li>
+</ul>
+<h2 id="骨骼原理">骨骼原理</h2>
+<h3 id="骨骼">骨骼</h3>
+<p>骨骼其实就和人体的骨骼一样。比如我们动动手指，我们能够看到的就有三根骨头在动-&gt;手指的一、二、三节骨骼。然后我们可以发现，手指头上面的肉跟随骨骼一起在联动。那么，如果我们将指头的肉想象成3D模型中的顶点，这些顶点就会跟随骨骼运动。也就是我们只需要调整骨骼，就能制作出各种动画出来。现在我们来模拟最简单骨骼，即-&gt;两根骨骼，一个顶点。如下demo:其中方块为骨骼，圆球为顶点。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.scene = <span class="keyword">new</span> Viewer3D(<span class="keyword">this</span>);</div><div class="line"><span class="keyword">this</span>.scene.autoResize = <span class="literal">true</span>;</div><div class="line"><span class="keyword">this</span>.scene.camera.transform.z = -<span class="number">150</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> rootJoint : Object3D = <span class="keyword">new</span> Object3D();</div><div class="line">rootJoint.addComponent(<span class="keyword">new</span> MeshRenderer(<span class="keyword">new</span> Cube(<span class="number">1</span>, <span class="number">10</span>, <span class="number">1</span>), <span class="keyword">new</span> ColorMaterial(<span class="number">0x00FF00</span>)));</div><div class="line">rootJoint.transform.y = <span class="number">15</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> joint : Object3D = <span class="keyword">new</span> Object3D();</div><div class="line">joint.addComponent(<span class="keyword">new</span> MeshRenderer(<span class="keyword">new</span> Cube(<span class="number">1</span>, <span class="number">10</span>, <span class="number">1</span>), <span class="keyword">new</span> ColorMaterial(<span class="number">0x777777</span>)));</div><div class="line">joint.transform.y = -<span class="number">7.5</span>;</div><div class="line">joint.transform.x = <span class="number">3</span>;</div><div class="line">joint.transform.rotateZ(<span class="number">45</span>);</div><div class="line">rootJoint.addChild(joint);</div><div class="line"></div><div class="line"><span class="keyword">var</span> vertex : Object3D = <span class="keyword">new</span> Object3D();</div><div class="line">vertex.addComponent(<span class="keyword">new</span> MeshRenderer(<span class="keyword">new</span> Sphere(<span class="number">2</span>, <span class="number">24</span>), <span class="keyword">new</span> ColorMaterial(<span class="number">0xFF0000</span>)));</div><div class="line">vertex.transform.y = -<span class="number">5</span>;</div><div class="line">joint.addChild(vertex);</div><div class="line"></div><div class="line">rootJoint.addEventListener(Object3D.ENTER_FRAME, <span class="function"><span class="keyword">function</span><span class="params">(e : Event)</span><span class="type">:void</span></span>{</div><div class="line">	rootJoint.transform.rotateZ(<span class="number">1</span>);</div><div class="line">});</div><div class="line"></div><div class="line"><span class="keyword">this</span>.scene.addChild(rootJoint);</div></pre></td></tr></table></figure>
+
+<iframe src="http://boblchen.github.io/samples/stage3d_16_%E9%AA%A8%E9%AA%BC/1/MonkeyWeb.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+<h3 id="复杂变换">复杂变换</h3>
+<p>我们仍然来仔细观察我们的手指运动。我们可以发现可见的三个骨骼用力程度不同，并且三根骨骼同时都在发生旋转、位移。既然涉及到了旋转、位移，那么我们就有必要使用到4x4矩阵来保存这些数据。我们把注意力放在关节点哪里，我们发现那里的肉并不只是受到一个跟骨骼的影响，它们同时受到多根骨头影响，并且受力程度不同。我们把这些肉当成顶点，那么我们就需要保存这个顶点对应的受力骨骼，以及受力程度。因此关系如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">顶点 <span class="attr_selector">[骨骼1、骨骼2、骨骼3、骨骼4...]</span> <span class="attr_selector">[受力1、受力2、受力3、受力4...]</span></div></pre></td></tr></table></figure>
+
+<p>因此，如果我们保存了顶点以及对应的骨骼以及权重(受力)。那么我们只需要遍历每一个顶点，然后将顶点转换到骨骼对应的空间，并且乘以受力，将所有的影响的骨骼都计算一遍，然后叠加起来，最终的结果就是这个店在所有骨骼的影响下最终结果。最后我们只需要调整骨骼的位置，角度，重复上面的过程，我们就可以计算每一帧每个顶点在骨骼的影响下最终结果。</p>
+<h3 id="BindPose">BindPose</h3>
+<p>我们在制作骨骼动画时，我们需要以一个参照物来调整动画。我们总不能随意瞎调调。这样对于顶点变换来说是糟糕的。因为每一帧的数据都是以不同的参照物来调的，那么这个时候，骨骼系统就失去了原有的意义。我们看一下下图的bindpose。</p>
+<img src="/images/stage3d_16_骨骼/814D57C2-3024-47AD-90A0-71F29A7F3918.png" class="[class names]">
+
+<p>我们就可以发现，骨骼在参照物中具有不同的位置方向。例如手臂是平行的，腿骨是竖着的。也就是参照物本身就是被位移+旋转了的。因此我们在计算顶点之后，还需要将顶点在从BindPose转换到世界空间中。</p>
+<h3 id="正向动力学">正向动力学</h3>
+<p>正向动力学是运用在骨骼系统中的一种驱动力学。我们把骨骼系统做成子父级关系，用父级的驱动驱动子集。例如刚才的demo。就是正向动力，我们使用的是rootJoint来驱动子集。例如我们人体，我们动动手臂，那么手指肯定会跟随一起运动。但是我们动动手指，手臂还是会停留在原处。这种在制作的时候非常快速简单，但是这种方式也有弊端。例如我们的手臂抓住扶手，那么我们的手臂其实也是需要运动的，但是由于正向动力学，手臂并没有动。</p>
+<h3 id="反向动力学">反向动力学</h3>
+<p>反向动力学其实就是通过子节点来驱动父节点。</p>
+<h3 id="运用">运用</h3>
+<p>其实很简单，根据上面我们的定义，我们只需要知道每个骨骼的BindPose，每个骨骼在当前帧的位移，旋转信息(这个信息是相对于父级)，以及每个顶点对应的骨骼以及权重。我们就可以轻松计算出最终动画。</p>
+<ul>
+<li>根据每个骨骼的当前变换计算出这个骨骼在整个骨骼系统中的真实变换BoneGlobalTransfrom。(即：这个骨骼在经过了父级骨骼驱动以及自身变换之后的最终变换)</li>
+<li>将每个骨骼的真实变换逆向转换到世界空间，BindPose-&gt;BindPose.Invert()-&gt;BoneGlobalTransfrom * BindPose.Invert()</li>
+<li>将顶点应用到骨骼变换中去，vert <em> Bone1 </em> Weight1 + vert <em> Bone2 </em> Weight2 + ….</li>
+</ul>
+<h3 id="Stage3D">Stage3D</h3>
+<p>在stage3d中由于属性寄存器只有8个，并且顶点需要保持骨骼的索引，对应的权重。如果保持的数据太多，不仅属性寄存器不够用，并且其它数据也将使用不到属性寄存器。因此我们强制顶点受到的影响的骨骼数量为4个。那么每个顶点就会对应4个索引，4个权重，占用两个属性寄存器。关于每一帧的骨骼数据，对于每一帧来说，我们只需要将当期帧的骨骼数据上传至显卡即可。由于顶点常量寄存器VC只有128个。但是一个矩阵占用4个寄存器。因此理论上面我们只能使用最多32个骨骼。那么大32个骨骼的骨骼动画，我们将不能使用gpu加速来渲染。为了尽可能多的增加骨骼，我们需要去掉无用的数据。我们把4x4矩阵捞出来看一下，就会发现CPU中的Matrix3D矩阵最后一列都是0.这一列并没有保存任何数据，只是为了占位。因此我们将这一列数据丢弃，那么Matrix3D经过转置之后，在GPU中就变成了3x4矩阵。因此我们可以使用128 / 3 = 42根骨骼。但是由于其它例如光照等等需要寄存器。因此我暂且将数量限制为36根。留出20个寄存器来供其它使用。最后我们需要在AGAL中编写代码，对顶点进行变换。代码如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line"><span class="package"><span class="keyword">package</span> <span class="title">monkey</span>.<span class="title">core</span>.<span class="title">shader</span>.<span class="title">filters</span> {</span></div><div class="line">	</div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.utils.ByteArray;</span></div><div class="line">	</div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.base.Surface3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.shader.utils.ShaderRegisterCache;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.shader.utils.ShaderRegisterElement;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.shader.utils.VcRegisterLabel;</span></div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 3x4骨骼动画 </div><div class="line">	 * @author Neil</div><div class="line">	 * </div><div class="line">	 */	</div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SkeletonFilter34</span> <span class="keyword">extends</span> <span class="title">Filter3D</span> </span>{</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> boneLabel : VcRegisterLabel;</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">SkeletonFilter34</span><span class="params">()</span> </span>{</div><div class="line">			<span class="keyword">super</span>(<span class="string">"SkeletonFilter34"</span>);</div><div class="line">			<span class="keyword">this</span>.priority = <span class="number">1000</span>;</div><div class="line">			<span class="keyword">this</span>.boneLabel = <span class="keyword">new</span> VcRegisterLabel(<span class="literal">null</span>);</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span> <span class="title">data</span><span class="params">(bytes : ByteArray)</span> <span class="type">: void</span> </span>{</div><div class="line">			<span class="keyword">this</span>.boneLabel.bytes = bytes;</div><div class="line">		}</div><div class="line">		</div><div class="line">		<span class="keyword">override</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getVertexCode</span><span class="params">(regCache:ShaderRegisterCache, agal:Boolean)</span><span class="type">:String</span> </span>{</div><div class="line">			</div><div class="line">			<span class="comment">// 骨骼索引</span></div><div class="line">			<span class="keyword">var</span> idxVa : ShaderRegisterElement = regCache.getVa(Surface3D.SKIN_INDICES);</div><div class="line">			<span class="comment">// 骨骼权重</span></div><div class="line">			<span class="keyword">var</span> weiVa : ShaderRegisterElement = regCache.getVa(Surface3D.SKIN_WEIGHTS);</div><div class="line">			<span class="comment">// 顶点数据</span></div><div class="line">			<span class="keyword">var</span> posVa : ShaderRegisterElement = regCache.getVa(Surface3D.POSITION);</div><div class="line">			<span class="comment">// 申请108个vc寄存器-&gt;36 * 3</span></div><div class="line">			<span class="keyword">var</span> bones : ShaderRegisterElement = regCache.getVc(<span class="number">108</span>, boneLabel);</div><div class="line">			<span class="comment">// 临时变量</span></div><div class="line">			<span class="keyword">var</span> vt0   : ShaderRegisterElement = regCache.getVt();</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> indices : Array = [</div><div class="line">				idxVa + <span class="string">".x"</span>,</div><div class="line">				idxVa + <span class="string">".y"</span>,</div><div class="line">				idxVa + <span class="string">".z"</span>,</div><div class="line">				idxVa + <span class="string">".w"</span></div><div class="line">			];</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> weights : Array = [</div><div class="line">				weiVa + <span class="string">".x"</span>,</div><div class="line">				weiVa + <span class="string">".y"</span>,</div><div class="line">				weiVa + <span class="string">".z"</span>,</div><div class="line">				weiVa + <span class="string">".w"</span></div><div class="line">			];</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> code : String = <span class="string">''</span>;</div><div class="line">			</div><div class="line">			<span class="keyword">if</span> (agal) {</div><div class="line">				<span class="comment">// 对op赋值为0</span></div><div class="line">				code += <span class="string">'mov '</span> + regCache.op + <span class="string">'.xyz, '</span> + regCache.vc0123 + <span class="string">'.xxx \n'</span>;</div><div class="line">				<span class="comment">// 遍历四个骨骼索引以及权重</span></div><div class="line">				<span class="keyword">for</span> (<span class="keyword">var</span> i:int = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) {</div><div class="line">					<span class="comment">// 乘以骨骼</span></div><div class="line">					code += <span class="string">'m34 '</span> + vt0 + <span class="string">'.xyz, '</span> + posVa + <span class="string">', '</span> + <span class="string">'vc['</span> + indices[i] + <span class="string">"+"</span> + bones.index + <span class="string">'].xyzw \n'</span>;</div><div class="line">					<span class="comment">// 乘以权重</span></div><div class="line">					code += <span class="string">'mul '</span> + vt0 + <span class="string">'.xyz, '</span> + vt0 + <span class="string">'.xyz, '</span> + weights[i] + <span class="string">' \n'</span>;</div><div class="line">					<span class="comment">// add</span></div><div class="line">					code += <span class="string">'add '</span> + regCache.op + <span class="string">'.xyz, '</span> + regCache.op + <span class="string">'.xyz, '</span> + vt0 + <span class="string">'.xyz \n'</span>;</div><div class="line">				}</div><div class="line">			}</div><div class="line">			</div><div class="line">			regCache.removeFt(vt0);</div><div class="line">			<span class="keyword">return</span> code;</div><div class="line">		}</div><div class="line">			</div><div class="line">		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="package"><span class="keyword">package</span> {</span></div><div class="line"></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.Sprite;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.StageAlign;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.display.StageScaleMode;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> flash.events.Event;</span></div><div class="line">	</div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.animator.SkeletonAnimator;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.base.Object3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.materials.Material3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.scene.Scene3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.scene.Viewer3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.shader.Shader3D;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.shader.filters.ColorFilter;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.shader.filters.SkeletonFilter34;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.utils.AnimUtil;</span></div><div class="line">	<span class="preprocessor"><span class="keyword">import</span> monkey.core.utils.Mesh3DUtils;</span></div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MonkeyWeb</span> <span class="keyword">extends</span> <span class="title">Sprite</span> </span>{</div><div class="line">		</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> scene : Scene3D;</div><div class="line">		</div><div class="line">		[Embed(source=<span class="string">"xiaonan_boo1.mesh"</span>, mimeType=<span class="string">"application/octet-stream"</span>)]</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> MESH : Class;</div><div class="line">		[Embed(source=<span class="string">"xiaonan_boo1.anim"</span>, mimeType=<span class="string">"application/octet-stream"</span>)]</div><div class="line">		<span class="keyword">private</span> <span class="keyword">var</span> ANIM : Class;</div><div class="line">		</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">MonkeyWeb</span><span class="params">()</span> </span>{</div><div class="line">			stage.scaleMode = StageScaleMode.NO_SCALE;</div><div class="line">			stage.align = StageAlign.TOP_LEFT;</div><div class="line">			stage.frameRate = <span class="number">15</span>;</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>.scene = <span class="keyword">new</span> Viewer3D(<span class="keyword">this</span>);</div><div class="line">			<span class="keyword">this</span>.scene.autoResize = <span class="literal">true</span>;</div><div class="line">			<span class="keyword">this</span>.scene.camera.transform.z = -<span class="number">150</span>;</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> skeleton : SkeletonFilter34 = <span class="keyword">new</span> SkeletonFilter34();</div><div class="line">			<span class="keyword">var</span> shader : Shader3D = <span class="keyword">new</span> Shader3D([]);</div><div class="line">			shader.addFilter(skeleton);</div><div class="line">			shader.addFilter(<span class="keyword">new</span> ColorFilter(<span class="number">0.7</span>, <span class="number">0.7</span>, <span class="number">0.7</span>));</div><div class="line">			<span class="keyword">var</span> material : Material3D = <span class="keyword">new</span> Material3D(shader);</div><div class="line">			</div><div class="line">			<span class="keyword">var</span> obj  : Object3D = Mesh3DUtils.readMesh(<span class="keyword">new</span> MESH());</div><div class="line">			obj.renderer.material = material;</div><div class="line">			<span class="keyword">var</span> anim : SkeletonAnimator = AnimUtil.readAnim(<span class="keyword">new</span> ANIM()) <span class="keyword">as</span> SkeletonAnimator; </div><div class="line">			obj.addComponent(anim);</div><div class="line">			anim.fps = <span class="number">15</span>;</div><div class="line">			anim.play();</div><div class="line">			</div><div class="line">			obj.addEventListener(Object3D.ENTER_FRAME, <span class="function"><span class="keyword">function</span><span class="params">(e:Event)</span><span class="type">:void</span></span>{</div><div class="line">				trace(anim.currentFrame);</div><div class="line">				skeleton.data = anim.getBoneBytes(<span class="number">0</span>, int(anim.currentFrame));</div><div class="line">			});</div><div class="line">			</div><div class="line">			trace(anim.totalFrames);</div><div class="line">			</div><div class="line">			<span class="keyword">this</span>.scene.addChild(obj);</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>最终结果如下:</p>
+<iframe src="http://boblchen.github.io/samples/stage3d_16_%E9%AA%A8%E9%AA%BC/2/MonkeyWeb.html" width="800" height="600" frameborder="0" allowfullscreen></iframe>
+
+<h3 id="后面我会详细关于FBX文件的解析，其中就包括了如何在提前计算骨骼相关的数据，为游戏优化做准备。">后面我会详细关于FBX文件的解析，其中就包括了如何在提前计算骨骼相关的数据，为游戏优化做准备。</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/02/28/stage3d-16-骨骼动画/" data-id="zfej2gmxefnujf30" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/02/12/stage3d-15-灯光/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">stage3d_15_平行光</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/3D/">3D</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FLash3D/">FLash3D</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stage3D/">Stage3D</a><span class="tag-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/3D/" style="font-size: NaNpx;">3D</a><a href="/tags/FLash3D/" style="font-size: NaNpx;">FLash3D</a><a href="/tags/Stage3D/" style="font-size: NaNpx;">Stage3D</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/02/28/stage3d-16-骨骼动画/">stage3d_16_骨骼动画</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/12/stage3d-15-灯光/">stage3d_15_平行光</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/09/stage3d-14-深度混合代码/">stage3d_14_裁减以及shader代码</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/05/stage3d-13-法线/">stage3d_13_法线以及光照</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/03/stage3d-12-深度/">stage3d_12_深度</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 小朋友 QQ:470259651<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>
